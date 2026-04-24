@@ -1,0 +1,8 @@
+.DS_Store
+.idea
+wordpress/plugins/advanced-custom-fields-pro
+wordpress/themes/hope-radio/node_modules
+frontend/node_modules
+frontend/dist
+frontend/.env
+front-assets/

@@ -1,0 +1,9 @@
+frontend/node_modules
+wordpress/node_modules
+wordpress/.DS_Store
+frontend/dist
+frontend/.DS_Store
+wordpress/dist
+.DS_Store
+.env
+.env.local

@@ -1,0 +1,135 @@
+services:
+
+  # ─── Base de données MySQL pour WordPress ───────────────────────────────────
+  db:
+    image: mysql:8.0
+    container_name: radio_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - radio_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "wordpress", "-pwordpress"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── WordPress (back-office + API) ──────────────────────────────────────────
+  wordpress:
+    image: wordpress:6.5-php8.2-apache
+    container_name: radio_wordpress
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: "true"
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_ENVIRONMENT_TYPE', 'local');
+        define('SCRIPT_DEBUG', true);
+        /* Autoriser les requêtes cross-origin depuis Next.js */
+        define('GRAPHQL_DEBUG', true);
+    volumes:
+      # Thème headless custom (à créer dans ./wordpress/themes/hope-radio)
+      - ./wordpress/themes/hope-radio:/var/www/html/wp-content/themes/hope-radio
+      # Plugins à versionner (WPGraphQL, Faust.js plugin, ACF, etc.)
+      - ./wordpress/plugins:/var/www/html/wp-content/plugins/local-plugins
+      # Uploads persistants
+      - wp_uploads:/var/www/html/wp-content/uploads
+      # Config CORS et WP-CLI
+      - ./wordpress/config/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    ports:
+      - "8080:80"
+    networks:
+      - radio_network
+
+  # ─── WP-CLI : outils d'administration en ligne de commande ──────────────────
+  wpcli:
+    image: wordpress:cli-php8.2
+    container_name: radio_wpcli
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ./wordpress/themes/hope-radio:/var/www/html/wp-content/themes/hope-radio
+      - ./wordpress/plugins:/var/www/html/wp-content/plugins/local-plugins
+      - wp_uploads:/var/www/html/wp-content/uploads
+      - ./wordpress/scripts:/scripts
+    user: "33:33"
+    networks:
+      - radio_network
+    # Ne tourne pas en continu — utilisé via `docker compose run wpcli wp <commande>`
+    profiles:
+      - tools
+
+  # ─── Next.js (front web) ────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: radio_nextjs
+    restart: unless-stopped
+    depends_on:
+      - wordpress
+    environment:
+      # URL WordPress vue depuis le réseau Docker interne
+      NEXT_PUBLIC_WORDPRESS_URL: http://wordpress
+      WORDPRESS_API_URL: http://wordpress/graphql
+      # URL publique pour le browser (hors Docker)
+      NEXT_PUBLIC_WORDPRESS_PUBLIC_URL: http://localhost:8080
+      # Faust.js
+      FAUST_SECRET_KEY: dev-secret-key-change-in-prod
+      NEXT_PUBLIC_URL: http://localhost:3000
+    volumes:
+      # Hot-reload : le code source est monté en direct
+      - ./frontend:/app
+      # Évite d'écraser node_modules du conteneur par ceux de l'hôte
+      - frontend_node_modules:/app/node_modules
+      - frontend_next_cache:/app/.next
+    ports:
+      - "3000:3000"
+    networks:
+      - radio_network
+
+  # ─── phpMyAdmin (optionnel, accès BDD via navigateur) ───────────────────────
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    container_name: radio_phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_USER: wordpress
+      PMA_PASSWORD: wordpress
+    ports:
+      - "8081:80"
+    networks:
+      - radio_network
+    profiles:
+      - tools
+
+volumes:
+  db_data:
+  wp_uploads:
+  frontend_node_modules:
+  frontend_next_cache:
+
+networks:
+  radio_network:
+    driver: bridge
