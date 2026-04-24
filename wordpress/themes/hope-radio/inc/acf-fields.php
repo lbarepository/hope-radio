@@ -1,0 +1,196 @@
+<?php
+
+if (!function_exists('acf_add_local_field_group')) {
+    return;
+}
+
+acf_add_local_field_group([
+    'key'      => 'group_emission',
+    'title'    => "Informations de l'émission",
+    'fields'   => [
+        [
+            'key'          => 'field_emission_horaire',
+            'label'        => 'Horaire',
+            'name'         => 'horaire',
+            'type'         => 'text',
+            'instructions' => 'Ex : Lundi – Vendredi, 7h – 9h',
+        ],
+        [
+            'key'   => 'field_emission_theme',
+            'label' => 'Thème',
+            'name'  => 'theme',
+            'type'  => 'text',
+        ],
+        [
+            'key'   => 'field_emission_stream_url',
+            'label' => 'URL du stream',
+            'name'  => 'stream_url',
+            'type'  => 'url',
+        ],
+        [
+            'key'           => 'field_emission_animateurs',
+            'label'         => 'Animateurs',
+            'name'          => 'animateurs',
+            'type'          => 'relationship',
+            'post_type'     => ['animateur'],
+            'filters'       => ['search'],
+            'return_format' => 'object',
+        ],
+    ],
+    'location' => [
+        [['param' => 'post_type', 'operator' => '==', 'value' => 'emission']],
+    ],
+]);
+
+acf_add_local_field_group([
+    'key'    => 'group_animateur',
+    'title'  => "Informations de l'animateur",
+    'fields' => [
+        [
+            'key'      => 'field_animateur_prenom',
+            'label'    => 'Prénom',
+            'name'     => 'prenom',
+            'type'     => 'text',
+            'required' => 1,
+        ],
+        [
+            'key'      => 'field_animateur_nom',
+            'label'    => 'Nom',
+            'name'     => 'nom',
+            'type'     => 'text',
+            'required' => 1,
+        ],
+        [
+            'key'   => 'field_animateur_fonction',
+            'label' => 'Fonction',
+            'name'  => 'fonction',
+            'type'  => 'text',
+        ],
+        [
+            'key'     => 'field_animateur_bio',
+            'label'   => 'Biographie',
+            'name'    => 'bio',
+            'type'    => 'wysiwyg',
+            'toolbar' => 'basic',
+            'tabs'    => 'visual',
+        ],
+        [
+            'key'           => 'field_animateur_photo',
+            'label'         => 'Photo',
+            'name'          => 'photo',
+            'type'          => 'image',
+            'return_format' => 'array',
+            'preview_size'  => 'medium',
+        ],
+        [
+            'key'        => 'field_animateur_reseaux',
+            'label'      => 'Réseaux sociaux',
+            'name'       => 'reseaux_sociaux',
+            'type'       => 'group',
+            'layout'     => 'block',
+            'sub_fields' => [
+                [
+                    'key'   => 'field_animateur_facebook',
+                    'label' => 'Facebook',
+                    'name'  => 'facebook',
+                    'type'  => 'url',
+                ],
+                [
+                    'key'   => 'field_animateur_instagram',
+                    'label' => 'Instagram',
+                    'name'  => 'instagram',
+                    'type'  => 'url',
+                ],
+                [
+                    'key'   => 'field_animateur_twitter',
+                    'label' => 'Twitter / X',
+                    'name'  => 'twitter',
+                    'type'  => 'url',
+                ],
+                [
+                    'key'   => 'field_animateur_youtube',
+                    'label' => 'YouTube',
+                    'name'  => 'youtube',
+                    'type'  => 'url',
+                ],
+            ],
+        ],
+    ],
+    'location' => [
+        [['param' => 'post_type', 'operator' => '==', 'value' => 'animateur']],
+    ],
+]);
+
+acf_add_local_field_group([
+    'key'    => 'group_podcast',
+    'title'  => 'Informations du podcast',
+    'fields' => [
+        [
+            'key'           => 'field_podcast_fichier_audio',
+            'label'         => 'Fichier audio',
+            'name'          => 'fichier_audio',
+            'type'          => 'file',
+            'return_format' => 'array',
+            'mime_types'    => 'mp3, m4a, ogg, wav',
+        ],
+        [
+            'key'           => 'field_podcast_emission',
+            'label'         => 'Émission associée',
+            'name'          => 'emission',
+            'type'          => 'relationship',
+            'post_type'     => ['emission'],
+            'filters'       => ['search'],
+            'return_format' => 'object',
+            'max'           => 1,
+        ],
+        [
+            'key'          => 'field_podcast_duree',
+            'label'        => 'Durée',
+            'name'         => 'duree',
+            'type'         => 'text',
+            'instructions' => 'Ex : 1h30 ou 45 min',
+        ],
+        [
+            'key'            => 'field_podcast_date_enregistrement',
+            'label'          => "Date d'enregistrement",
+            'name'           => 'date_enregistrement',
+            'type'           => 'date_picker',
+            'display_format' => 'd/m/Y',
+            'return_format'  => 'Y-m-d',
+        ],
+    ],
+    'location' => [
+        [['param' => 'post_type', 'operator' => '==', 'value' => 'podcast']],
+    ],
+]);
+
+acf_add_local_field_group([
+    'key'    => 'group_agenda',
+    'title'  => "Informations de l'événement",
+    'fields' => [
+        [
+            'key'            => 'field_agenda_date_evenement',
+            'label'          => "Date de l'événement",
+            'name'           => 'date_evenement',
+            'type'           => 'date_picker',
+            'display_format' => 'd/m/Y',
+            'return_format'  => 'Y-m-d',
+            'required'       => 1,
+        ],
+        [
+            'key'   => 'field_agenda_theme',
+            'label' => 'Thème',
+            'name'  => 'theme',
+            'type'  => 'text',
+        ],
+        [
+            'key'   => 'field_agenda_lien',
+            'label' => 'Lien',
+            'name'  => 'lien',
+            'type'  => 'url',
+        ],
+    ],
+    'location' => [
+        [['param' => 'post_type', 'operator' => '==', 'value' => 'agenda']],
+    ],
+]);

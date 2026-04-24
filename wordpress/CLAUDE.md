@@ -18,8 +18,13 @@ hope-radio/
 ├── CLAUDE.md                        ← ce fichier
 ├── theme.json                       ← cadrage éditorial (source de vérité des styles admin)
 ├── style.css                        ← en-tête obligatoire WordPress (pas de styles ici)
-├── functions.php                    ← CPT, blocs autorisés, hooks, menus
+├── functions.php                    ← loader uniquement (require_once des fichiers inc/)
 ├── index.php                        ← vide — le front est géré par Next.js
+├── inc/
+│   ├── theme-setup.php              ← after_setup_theme : theme supports + nav menus
+│   ├── post-types.php               ← init : enregistrement des 4 CPT
+│   ├── gutenberg.php                ← filtres éditeur : blocs autorisés, styles de blocs
+│   └── acf-fields.php               ← acf_add_local_field_group pour chaque CPT
 ├── assets/
 │   └── css/
 │       └── blocks/                  ← styles placeholder admin, un fichier par bloc custom
