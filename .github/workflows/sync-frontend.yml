@@ -1,0 +1,33 @@
+name: Sync branche frontend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+
+jobs:
+  split:
+    name: Subtree split → branche frontend
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout complet
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurer git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Split frontend et push
+        run: |
+          git subtree split --prefix=frontend -b frontend-deploy
+          git push origin frontend-deploy:frontend --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
