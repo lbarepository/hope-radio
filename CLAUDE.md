@@ -125,3 +125,7 @@ FAUST_SECRET_KEY=xxx
 | Next.js App Router | https://nextjs.org/docs/app |
 | Expo Audio | https://docs.expo.dev/versions/latest/sdk/audio |
 | Zustand | https://zustand-demo.pmnd.rs |
+
+## Lancer les containers
+db : docker compose --profile tools up -d phpmyadmin
+wp : docker compose up -d
