@@ -194,3 +194,71 @@ acf_add_local_field_group([
         [['param' => 'post_type', 'operator' => '==', 'value' => 'agenda']],
     ],
 ]);
+
+// Scope each group to its target menu.
+// Uses location assignment when available, falls back to menu slug.
+// The 4th param ($field_group) is required to identify which group is being matched.
+add_filter('acf/location/rule_match/nav_menu_item', function ($match, $rule, $screen, $field_group) {
+    $scoped = ['group_top_menu_item', 'group_reseaux_menu_item'];
+    if (!isset($field_group['key']) || !in_array($field_group['key'], $scoped, true)) {
+        return $match;
+    }
+
+    $nav_menu_id = (int) acf_get_data('nav_menu_id');
+    if (!$nav_menu_id && isset($_REQUEST['menu'])) {
+        $nav_menu_id = (int) $_REQUEST['menu'];
+    }
+    if (!$nav_menu_id) return $match;
+
+    $locations = get_nav_menu_locations();
+    $menu      = wp_get_nav_menu_object($nav_menu_id);
+    if (!$menu) return false;
+
+    if ($field_group['key'] === 'group_top_menu_item') {
+        $by_location = isset($locations['secondary-menu']) && (int) $locations['secondary-menu'] === $nav_menu_id;
+        return $by_location || $menu->slug === 'top-menu';
+    }
+
+    if ($field_group['key'] === 'group_reseaux_menu_item') {
+        $by_location = isset($locations['reseaux-sociaux']) && (int) $locations['reseaux-sociaux'] === $nav_menu_id;
+        return $by_location || $menu->slug === 'reseaux-sociaux';
+    }
+
+    return $match;
+}, 10, 4);
+
+acf_add_local_field_group([
+    'key'    => 'group_top_menu_item',
+    'title'  => 'Icône — Top Menu',
+    'fields' => [
+        [
+            'key'           => 'field_top_menu_item_icone',
+            'label'         => 'Icône',
+            'name'          => 'icone',
+            'type'          => 'image',
+            'return_format' => 'array',
+            'preview_size'  => 'thumbnail',
+        ],
+    ],
+    'location' => [
+        [['param' => 'nav_menu_item', 'operator' => '==', 'value' => 'all']],
+    ],
+]);
+
+acf_add_local_field_group([
+    'key'    => 'group_reseaux_menu_item',
+    'title'  => 'Icône — Réseaux sociaux',
+    'fields' => [
+        [
+            'key'           => 'field_reseaux_menu_item_icone',
+            'label'         => 'Icône',
+            'name'          => 'icone',
+            'type'          => 'image',
+            'return_format' => 'array',
+            'preview_size'  => 'thumbnail',
+        ],
+    ],
+    'location' => [
+        [['param' => 'nav_menu_item', 'operator' => '==', 'value' => 'all']],
+    ],
+]);

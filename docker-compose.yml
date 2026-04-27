@@ -43,7 +43,7 @@ services:
       # Thème headless custom (à créer dans ./wordpress/themes/hope-radio)
       - ./wordpress/themes/hope-radio:/var/www/html/wp-content/themes/hope-radio
       # Plugins à versionner (WPGraphQL, Faust.js plugin, ACF, etc.)
-      - ./wordpress/plugins:/var/www/html/wp-content/plugins/local-plugins
+      - ./wordpress/plugins:/var/www/html/wp-content/plugins
       # Uploads persistants
       - wp_uploads:/var/www/html/wp-content/uploads
       # Config CORS et WP-CLI
@@ -67,7 +67,7 @@ services:
       WORDPRESS_DB_NAME: wordpress
     volumes:
       - ./wordpress/themes/hope-radio:/var/www/html/wp-content/themes/hope-radio
-      - ./wordpress/plugins:/var/www/html/wp-content/plugins/local-plugins
+      - ./wordpress/plugins:/var/www/html/wp-content/plugins
       - wp_uploads:/var/www/html/wp-content/uploads
       - ./wordpress/scripts:/scripts
     user: "33:33"

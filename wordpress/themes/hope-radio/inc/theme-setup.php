@@ -15,7 +15,8 @@ function after_setup_theme_hope_radio() {
 
     register_nav_menus([
         'main-menu'      => __('Menu principal', 'hope-radio'),
-        'secondary-menu' => __('Menu secondaire', 'hope-radio'),
+        'secondary-menu' => __('Top menu', 'hope-radio'),
+        'reseaux-sociaux' => __('Réseaux sociaux', 'hope-radio'),
     ]);
 }
 
