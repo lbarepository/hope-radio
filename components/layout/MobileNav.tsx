@@ -54,7 +54,7 @@ export default function MobileNav({ items, logoSrc, logoAlt }: MobileNavProps) {
           </svg>
         </button>
 
-        <Link href="/" className="shrink-0">
+        <Link href="/" className="flex justify-center">
           {logoSrc ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -71,7 +71,7 @@ export default function MobileNav({ items, logoSrc, logoAlt }: MobileNavProps) {
 
         <Link
           href={radioHref}
-          className="shrink-0 flex justify-between rounded-[30px] bg-secondary text-white font-button text-[16px] font-semibold px-[20px] py-[10px] inline-flex items-center gap-[8px] cursor-pointer"
+          className="justify-self-end flex justify-between rounded-[30px] bg-secondary text-white font-button text-[16px] font-semibold px-[20px] py-[10px] inline-flex items-center gap-[8px] cursor-pointer"
         >
           La radio
           <svg xmlns="http://www.w3.org/2000/svg" width="11" height="14" viewBox="0 0 11 14" fill="none" aria-hidden="true">

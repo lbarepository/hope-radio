@@ -18,7 +18,7 @@ export default function TopMenu({ items, socialItems = [] }: TopMenuProps) {
             <li key={item.id}>
               <Link
                 href={normalizeMenuUrl(item.url)}
-                className="flex items-center gap-[10px] text-white text-[12px] font-bold leading-[20px] font-heading"
+                className="flex items-center gap-[10px] text-white text-[clamp(10px,0.9vw,12px)] font-bold leading-[20px] font-heading"
               >
                 {icone && (
                   // eslint-disable-next-line @next/next/no-img-element
