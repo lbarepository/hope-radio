@@ -9,12 +9,12 @@ interface NavMenuProps {
 export default function NavMenu({ items }: NavMenuProps) {
   return (
     <nav id="menu-container" className="flex flex-grow justify-end gap-8 items-center justify-between">
-      <ul className="flex gap-8">
+      <ul className="flex gap-8 min-[1139px]:gap-4 xl:gap-8">
         {items.map((item) => (
           <li key={item.id}>
             <Link
               href={normalizeMenuUrl(item.url)}
-              className="text-white text-center text-[18px] font-[900] leading-[60px] font-nav"
+              className="text-white text-center text-[clamp(13px,1.4vw,16px)] xl:text-[18px] font-[900] leading-[60px] font-nav"
             >
               {item.label}
             </Link>
@@ -31,14 +31,14 @@ export default function NavMenu({ items }: NavMenuProps) {
 
         <button
           type="button"
-          className="rounded-[30px] bg-white text-primary font-button text-[16px] font-semibold w-[203px] h-[50px] px-[30px] py-[10px] cursor-pointer"
+          className="rounded-[30px] bg-white text-primary font-button text-[clamp(12px,1.2vw,16px)] font-semibold w-[203px] min-[1139px]:w-fit xl:w-[203px] h-[50px] px-4 min-[1139px]:px-[30px] py-[10px] cursor-pointer"
         >
           Faire un don
         </button>
 
         <button
           type="button"
-          className="rounded-[30px] bg-secondary text-white font-button text-[16px] font-semibold w-[203px] h-[50px] px-[30px] py-[10px] cursor-pointer"
+          className="rounded-[30px] bg-secondary text-white font-button text-[clamp(12px,1.2vw,16px)] font-semibold w-[203px] min-[1139px]:w-fit xl:w-[203px] h-[50px] px-4 min-[1139px]:px-[30px] py-[10px] cursor-pointer"
         >
           Écouter le direct
         </button>

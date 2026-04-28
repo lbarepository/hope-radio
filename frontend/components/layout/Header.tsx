@@ -41,8 +41,8 @@ export default async function Header() {
   return (
     <header className="bg-brand-violet px-4 md:px-8 py-4 flex flex-col gap-[20px]">
 
-      {/* Mobile / tablette portrait (< lg) */}
-      <div className="lg:hidden">
+      {/* Mobile / tablette portrait (< 1139px) */}
+      <div className="min-[1139px]:hidden">
         <MobileNav
           items={mainItems}
           logoSrc={logo?.sourceUrl}
@@ -50,8 +50,8 @@ export default async function Header() {
         />
       </div>
 
-      {/* Desktop (>= lg) */}
-      <div className="hidden lg:flex items-center gap-8">
+      {/* Desktop (>= 1139px) */}
+      <div className="hidden min-[1139px]:flex items-center gap-8">
         <Link href="/" className="shrink-0">
           {logo?.sourceUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
