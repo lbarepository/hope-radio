@@ -7,4 +7,3 @@ workers/radio-stream-proxy/node_modules
 frontend/dist
 frontend/.env
 front-assets/
-modes/
