@@ -3,6 +3,7 @@
 wordpress/plugins/advanced-custom-fields-pro
 wordpress/themes/hope-radio/node_modules
 frontend/node_modules
+workers/radio-stream-proxy/node_modules
 frontend/dist
 frontend/.env
 front-assets/

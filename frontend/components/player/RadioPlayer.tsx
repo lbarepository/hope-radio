@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { usePlayerStore } from '@/store/playerStore';
 
-const STREAM_URL = 'https://stream.hoperadio.fr/hoperadio';
+const STREAM_BASE_URL =
+  process.env.NEXT_PUBLIC_STREAM_URL ?? 'https://stream.hoperadio.fr/hoperadio';
 const POLL_INTERVAL = 30_000;
 
 function parseXmlMeta(xml: string) {
@@ -30,7 +31,8 @@ export default function RadioPlayer() {
 
   // Create audio element once + écouter les événements de buffering
   useEffect(() => {
-    const audio = new Audio(STREAM_URL);
+    const audio = new Audio();
+    audio.crossOrigin = 'anonymous';
     audio.preload = 'none';
     audioRef.current = audio;
 
@@ -47,7 +49,6 @@ export default function RadioPlayer() {
       audio.removeEventListener('playing', onPlaying);
       audio.removeEventListener('error',   onError);
       audio.pause();
-      audio.src = '';
     };
   }, [setPlaying]);
 
@@ -56,10 +57,13 @@ export default function RadioPlayer() {
     const audio = audioRef.current;
     if (!audio) return;
     if (isPlaying) {
+      // Cache-busting param bypasses mobile carrier proxies that buffer infinite streams
+      audio.src = `${STREAM_BASE_URL}?t=${Date.now()}`;
       setIsLoading(true);
       audio.play().catch(() => { setIsLoading(false); setPlaying(false); });
     } else {
       audio.pause();
+      audio.src = '';
     }
   }, [isPlaying, setPlaying]);
 
