@@ -1,0 +1,69 @@
+#grille-calendar {
+    background: #fff;
+    padding: 16px;
+    border-radius: 4px;
+    margin-top: 16px;
+}
+
+/* Modal overlay + boîte */
+#grille-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+}
+
+#grille-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+#grille-modal-box {
+    position: relative;
+    background: #fff;
+    border-radius: 6px;
+    padding: 28px 32px;
+    width: 420px;
+    max-width: 95vw;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    z-index: 1;
+}
+
+#grille-modal-title {
+    margin: 0 0 20px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Champs */
+.grille-field {
+    margin-bottom: 16px;
+}
+
+.grille-field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.grille-field input,
+.grille-field select {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Actions */
+.grille-modal-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 24px;
+    align-items: center;
+}
+
+#grille-modal-error {
+    margin-top: 12px;
+    padding: 8px 12px;
+}
