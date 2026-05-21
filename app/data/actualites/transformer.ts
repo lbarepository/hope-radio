@@ -3,7 +3,23 @@
 // Ce fichier est le seul point autorisé à mapper la shape de l'API
 // vers le type interne ActualiteCard utilisé par ActualitesSection.
 
-import type { GetActualitesData } from '@/graphql/actualites';
+import type { GetActualitesData, GetActualiteArchiveData, ActualitePageInfo } from '@/graphql/actualites';
+
+export type { ActualitePageInfo };
+
+export interface ActualiteArchiveCard {
+  id:       string;
+  title:    string;
+  excerpt:  string;
+  category: string;
+  image: {
+    url: string;
+    alt: string;
+  };
+  uri: string;
+}
+
+const FALLBACK_ARCHIVE_IMAGE = 'https://placehold.co/744x380/72004A/FFFFFF?text=Actualite';
 
 export interface ActualiteCard {
   title:    string;   // post_title
@@ -38,4 +54,22 @@ export function transformActualites(data: GetActualitesData): ActualiteCard[] {
     },
     uri: `/actualite/${node.slug}`,
   }));
+}
+
+export function transformActualitesArchive(data: GetActualiteArchiveData): {
+  cards:    ActualiteArchiveCard[];
+  pageInfo: ActualitePageInfo;
+} {
+  const cards = data.posts.nodes.map((node) => ({
+    id:       node.id,
+    title:    node.title,
+    excerpt:  stripHtml(node.excerpt),
+    category: node.categories.nodes[0]?.name ?? '',
+    image: {
+      url: node.featuredImage?.node.sourceUrl ?? FALLBACK_ARCHIVE_IMAGE,
+      alt: node.featuredImage?.node.altText   ?? node.title,
+    },
+    uri: node.uri,
+  }));
+  return { cards, pageInfo: data.posts.pageInfo };
 }

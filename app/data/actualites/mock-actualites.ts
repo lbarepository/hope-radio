@@ -2,7 +2,77 @@
 //
 // !! Ne pas modifier la structure sans mettre à jour la query dans graphql/actualites.ts.
 
-import type { GetActualitesData } from '@/graphql/actualites';
+import type { GetActualitesData, GetActualiteArchiveData, ActualiteFilterCategory } from '@/graphql/actualites';
+
+export const MOCK_ACTUALITE_CATEGORIES: ActualiteFilterCategory[] = [
+  { id: 'cat-1', name: 'Musique',     slug: 'musique'     },
+  { id: 'cat-2', name: 'Culture',     slug: 'culture'     },
+  { id: 'cat-3', name: 'Société',     slug: 'societe'     },
+  { id: 'cat-4', name: 'Sport',       slug: 'sport'       },
+  { id: 'cat-5', name: 'Événements',  slug: 'evenements'  },
+];
+
+export const MOCK_ACTUALITES_ARCHIVE: GetActualiteArchiveData = {
+  posts: {
+    pageInfo: { hasNextPage: true, endCursor: 'cursor-page-1' },
+    nodes: [
+      {
+        id: 'post-1', databaseId: 1,
+        title: 'Grand concert de gospel au Zénith : une soirée inoubliable',
+        slug: 'grand-concert-gospel-zenith',
+        uri: '/actualites/grand-concert-gospel-zenith/',
+        excerpt: '<p>La salle était comble pour cet événement exceptionnel qui a réuni plus de cinq mille spectateurs venus célébrer la musique gospel.</p>',
+        featuredImage: { node: { sourceUrl: 'https://placehold.co/744x496/72004A/FFFFFF?text=Actualite+1', altText: 'Grand concert de gospel' } },
+        categories: { nodes: [{ name: 'Musique', slug: 'musique' }] },
+      },
+      {
+        id: 'post-2', databaseId: 2,
+        title: 'Hope Radio partenaire officiel du festival de musique urbaine',
+        slug: 'hope-radio-partenaire-festival',
+        uri: '/actualites/hope-radio-partenaire-festival/',
+        excerpt: '<p>Hope Radio renforce son ancrage culturel en devenant partenaire officiel du plus grand festival de musique urbaine de la région.</p>',
+        featuredImage: { node: { sourceUrl: 'https://placehold.co/744x496/72004A/FFFFFF?text=Actualite+2', altText: 'Festival musique urbaine' } },
+        categories: { nodes: [{ name: 'Musique', slug: 'musique' }] },
+      },
+      {
+        id: 'post-3', databaseId: 3,
+        title: 'Rencontre avec les animateurs : les coulisses de Hope Radio',
+        slug: 'coulisses-hope-radio',
+        uri: '/actualites/coulisses-hope-radio/',
+        excerpt: '<p>Plongez dans les coulisses de votre radio préférée et découvrez le quotidien de vos animateurs favoris.</p>',
+        featuredImage: { node: { sourceUrl: 'https://placehold.co/744x496/72004A/FFFFFF?text=Actualite+3', altText: 'Coulisses Hope Radio' } },
+        categories: { nodes: [{ name: 'Culture', slug: 'culture' }] },
+      },
+      {
+        id: 'post-4', databaseId: 4,
+        title: 'Journée mondiale de la paix : Hope Radio mobilise ses auditeurs',
+        slug: 'journee-mondiale-paix',
+        uri: '/actualites/journee-mondiale-paix/',
+        excerpt: '<p>À l\'occasion de la journée mondiale de la paix, Hope Radio lance une initiative citoyenne pour sensibiliser les communautés locales.</p>',
+        featuredImage: { node: { sourceUrl: 'https://placehold.co/744x496/72004A/FFFFFF?text=Actualite+4', altText: 'Journée mondiale de la paix' } },
+        categories: { nodes: [{ name: 'Société', slug: 'societe' }] },
+      },
+      {
+        id: 'post-5', databaseId: 5,
+        title: 'Championnat régional de football commenté en direct',
+        slug: 'championnat-regional-football',
+        uri: '/actualites/championnat-regional-football/',
+        excerpt: '<p>Hope Radio était en direct pour commenter les résultats du championnat régional de football, avec des analyses en plateau.</p>',
+        featuredImage: { node: { sourceUrl: 'https://placehold.co/744x496/72004A/FFFFFF?text=Actualite+5', altText: 'Championnat football' } },
+        categories: { nodes: [{ name: 'Sport', slug: 'sport' }] },
+      },
+      {
+        id: 'post-6', databaseId: 6,
+        title: 'Nouveau programme : "Culture Vivante" débarque sur Hope Radio',
+        slug: 'nouveau-programme-culture-vivante',
+        uri: '/actualites/nouveau-programme-culture-vivante/',
+        excerpt: '<p>Dès le lundi prochain, une nouvelle émission consacrée à la culture locale fera son apparition dans la grille de Hope Radio.</p>',
+        featuredImage: { node: { sourceUrl: 'https://placehold.co/744x496/72004A/FFFFFF?text=Actualite+6', altText: 'Culture Vivante' } },
+        categories: { nodes: [{ name: 'Événements', slug: 'evenements' }] },
+      },
+    ],
+  },
+};
 
 export const MOCK_ACTUALITES: GetActualitesData = {
   posts: {
