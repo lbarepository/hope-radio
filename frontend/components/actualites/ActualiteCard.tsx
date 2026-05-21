@@ -37,7 +37,7 @@ export default function ActualiteCard({ card }: ActualiteCardProps) {
         <div className="mt-auto pt-2">
           <Link
             href={card.uri}
-            className="inline-block bg-white border border-black/20 px-6 py-2 rounded-full font-heading text-sm font-bold text-black no-underline hover:bg-gray-50 transition-colors"
+            className="inline-block bg-primary px-6 py-2 rounded-full font-heading text-sm font-bold text-white no-underline hover:bg-secondary transition-colors"
           >
             Découvrir
           </Link>
