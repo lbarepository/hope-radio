@@ -1,7 +1,49 @@
-export default function Podcast() {
+import { fetchGraphQL }                                             from '@/lib/wordpress';
+import { GET_ACTUALITE_CATEGORIES, GET_ACTUALITES_ARCHIVE }        from '@/graphql/actualites';
+import type { GetActualiteCategoriesData, GetActualiteArchiveData } from '@/graphql/actualites';
+import { transformActualitesArchive }                              from '@/app/data/actualites/transformer';
+import { MOCK_ACTUALITE_CATEGORIES, MOCK_ACTUALITES_ARCHIVE }      from '@/app/data/actualites/mock-actualites';
+import { loadMoreActualites }                                      from './actions';
+import ActualitesClient                                            from '@/components/actualites/ActualitesClient';
+
+export default async function ActualitesPage() {
+  const [categoriesResult, postsResult] = await Promise.allSettled([
+    fetchGraphQL<GetActualiteCategoriesData>(
+      GET_ACTUALITE_CATEGORIES,
+      {},
+      { next: { revalidate: 3600 } },
+    ),
+    fetchGraphQL<GetActualiteArchiveData>(
+      GET_ACTUALITES_ARCHIVE,
+      { first: 6, after: null, categoryName: null },
+      { next: { revalidate: 3600 } },
+    ),
+  ]);
+
+  const categories =
+    categoriesResult.status === 'fulfilled'
+      ? categoriesResult.value.categories.nodes
+      : MOCK_ACTUALITE_CATEGORIES;
+
+  const { cards: initialCards, pageInfo: initialPageInfo } =
+    postsResult.status === 'fulfilled'
+      ? transformActualitesArchive(postsResult.value)
+      : transformActualitesArchive(MOCK_ACTUALITES_ARCHIVE);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      HOPE RADIO ACTUALITES
-    </div>
+    <main className="bg-primary min-h-screen py-16">
+      <div className="container mx-auto px-6 lg:px-0">
+        <h1 className="font-nav font-[900] text-[64px] md:text-[88px] leading-[90%] text-white text-center uppercase mb-10">
+          Actualités
+        </h1>
+
+        <ActualitesClient
+          initialCards={initialCards}
+          initialPageInfo={initialPageInfo}
+          categories={categories}
+          loadMore={loadMoreActualites}
+        />
+      </div>
+    </main>
   );
 }

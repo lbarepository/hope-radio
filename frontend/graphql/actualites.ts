@@ -56,3 +56,85 @@ export const GET_ACTUALITES = /* GraphQL */ `
     }
   }
 `;
+
+// ─── Archive Actualités (paginée + filtrable) ──────────────────────────────
+
+export interface ActualiteArchiveNode {
+  id:            string;
+  databaseId:    number;
+  title:         string;
+  uri:           string;
+  slug:          string;
+  excerpt:       string | null;
+  featuredImage: { node: { sourceUrl: string; altText: string } } | null;
+  categories:    { nodes: { name: string; slug: string }[] };
+}
+
+export interface ActualitePageInfo {
+  hasNextPage: boolean;
+  endCursor:   string | null;
+}
+
+export interface GetActualiteArchiveData {
+  posts: {
+    pageInfo: ActualitePageInfo;
+    nodes:    ActualiteArchiveNode[];
+  };
+}
+
+export interface ActualiteFilterCategory {
+  id:   string;
+  name: string;
+  slug: string;
+}
+
+export interface GetActualiteCategoriesData {
+  categories: { nodes: ActualiteFilterCategory[] };
+}
+
+export const GET_ACTUALITE_CATEGORIES = /* GraphQL */ `
+  query GetActualiteCategories {
+    categories(first: 100, where: { hideEmpty: true }) {
+      nodes {
+        id
+        name
+        slug
+      }
+    }
+  }
+`;
+
+export const GET_ACTUALITES_ARCHIVE = /* GraphQL */ `
+  query GetActualitesArchive($first: Int!, $after: String, $categoryName: String) {
+    posts(
+      first: $first
+      after: $after
+      where: { status: PUBLISH, categoryName: $categoryName }
+    ) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      nodes {
+        id
+        databaseId
+        title
+        uri
+        slug
+        excerpt
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+        categories {
+          nodes {
+            name
+            slug
+          }
+        }
+      }
+    }
+  }
+`;
