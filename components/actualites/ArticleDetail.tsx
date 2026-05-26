@@ -13,13 +13,12 @@ export default function ArticleDetail({ article }: Props) {
         <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start">
 
           {article.image && (
-            <div className="w-full lg:w-[465px] shrink-0">
+            <div className="relative w-full lg:w-[465px] lg:h-[465px] aspect-square lg:aspect-auto shrink-0">
               <Image
                 src={normalizeWpImageUrl(article.image.url)}
                 alt={article.image.alt}
-                width={465}
-                height={310}
-                className="w-full object-cover"
+                fill
+                className="object-cover"
               />
             </div>
           )}
