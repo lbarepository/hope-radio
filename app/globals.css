@@ -98,6 +98,65 @@ body {
   width: 100%;
 }
 
+/* ── Article content — corps HTML Gutenberg sur fond primary ─────────────── */
+
+.article-content {
+  color: #ffffff;
+  font-family: 'Century Gothic', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.article-content p {
+  margin: 0 0 1em;
+}
+
+.article-content p:last-child {
+  margin-bottom: 0;
+}
+
+.article-content h2,
+.article-content h3,
+.article-content h4 {
+  font-family: 'Gravesend Sans', sans-serif;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 1.5em 0 0.5em;
+  line-height: 1.2;
+}
+
+.article-content h2 { font-size: 24px; }
+.article-content h3 { font-size: 20px; }
+.article-content h4 { font-size: 18px; }
+
+.article-content ul,
+.article-content ol {
+  padding-left: 1.5em;
+  margin: 0 0 1em;
+}
+
+.article-content li { margin-bottom: 0.25em; }
+
+.article-content a {
+  color: #E45612;
+  text-decoration: underline;
+}
+
+.article-content a:hover { color: #ffffff; }
+
+.article-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.article-content blockquote {
+  border-left: 3px solid #E45612;
+  padding-left: 1em;
+  margin: 1em 0;
+  opacity: 0.85;
+}
+
 /* ── HeroSlider — Swiper overrides + responsive ─────────────────────────── */
 
 .hero-slider .swiper-pagination {

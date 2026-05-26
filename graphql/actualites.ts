@@ -104,6 +104,44 @@ export const GET_ACTUALITE_CATEGORIES = /* GraphQL */ `
   }
 `;
 
+// ─── Article single (par slug) ──────────────────────────────────────────────
+
+export interface ActualiteDetailNode {
+  title:         string;
+  content:       string | null;
+  slug:          string;
+  uri:           string;
+  featuredImage: { node: { sourceUrl: string; altText: string } } | null;
+  categories:    { nodes: { name: string; slug: string }[] };
+}
+
+export interface GetActualiteBySlugData {
+  post: ActualiteDetailNode | null;
+}
+
+export const GET_ACTUALITE_BY_SLUG = /* GraphQL */ `
+  query GetActualiteBySlug($slug: ID!) {
+    post(id: $slug, idType: SLUG) {
+      title
+      content
+      slug
+      uri
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+        }
+      }
+      categories {
+        nodes {
+          name
+          slug
+        }
+      }
+    }
+  }
+`;
+
 export const GET_ACTUALITES_ARCHIVE = /* GraphQL */ `
   query GetActualitesArchive($first: Int!, $after: String, $categoryName: String) {
     posts(
