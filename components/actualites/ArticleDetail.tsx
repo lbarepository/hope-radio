@@ -13,7 +13,7 @@ export default function ArticleDetail({ article }: Props) {
         <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start">
 
           {article.image && (
-            <div className="relative w-full lg:w-[465px] lg:h-[465px] aspect-square lg:aspect-auto shrink-0">
+            <div className="relative w-full lg:w-[465px] lg:h-[465px] aspect-square lg:aspect-auto shrink-0 rounded-[20px] overflow-hidden">
               <Image
                 src={normalizeWpImageUrl(article.image.url)}
                 alt={article.image.alt}
