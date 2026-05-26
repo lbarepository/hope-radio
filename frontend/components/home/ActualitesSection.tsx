@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
-import { fetchGraphQL }                        from '@/lib/wordpress';
-import { MOCK_ACTUALITES, transformActualites } from '@/app/data';
-import type { ActualiteCard }                   from '@/app/data';
+import { fetchGraphQL }             from '@/lib/wordpress';
+import { transformActualites }     from '@/app/data';
+import type { ActualiteCard }      from '@/app/data';
 import { GET_ACTUALITES }                       from '@/graphql/actualites';
 import type { GetActualitesData }               from '@/graphql/actualites';
 import ActualitesSlider                         from './ActualitesSlider';
@@ -72,7 +72,7 @@ export default async function ActualitesSection({
     );
     cards = transformActualites(data).slice(0, count);
   } catch {
-    cards = transformActualites(MOCK_ACTUALITES).slice(0, count);
+    // WP indisponible — section masquée
   }
 
   if (cards.length === 0) return null;

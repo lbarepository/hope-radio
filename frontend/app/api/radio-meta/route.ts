@@ -5,7 +5,21 @@ export async function GET(request: Request) {
       ? 'http://hoperadiofrance.fr/meta/ch/'
       : 'http://hoperadiofrance.fr/meta/';
 
-  const res = await fetch(metaUrl, { next: { revalidate: 0 } });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+
+  let res: Response;
+  try {
+    res = await fetch(metaUrl, { next: { revalidate: 0 }, signal: controller.signal });
+  } catch {
+    return new Response('<error>meta unavailable</error>', {
+      status: 503,
+      headers: { 'Content-Type': 'text/xml' },
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
+
   let text = await res.text();
 
   // Le serveur source est HTTP uniquement — on réécrit les URLs de cover

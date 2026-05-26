@@ -1,7 +1,7 @@
 import { fetchGraphQL }                             from '@/lib/wordpress';
 import { GET_GRILLE_SLOTS }                          from '@/graphql/grille';
 import type { GetGrilleSlotsData }                   from '@/graphql/grille';
-import { MOCK_GRILLE_SLOTS, MOCK_WEEK_DATES, transformGrilleSlots } from '@/app/data';
+import { transformGrilleSlots } from '@/app/data';
 import GrilleClient                                  from '@/components/grille/GrilleClient';
 
 function getMondayOfCurrentWeek(): Date {
@@ -23,8 +23,8 @@ export default async function GrillePage() {
     return d.toISOString().split('T')[0];
   });
 
-  let slots     = transformGrilleSlots(MOCK_GRILLE_SLOTS);
-  let usedDates = MOCK_WEEK_DATES;
+  let slots     = transformGrilleSlots({ grilleSlots: [] });
+  let usedDates = weekDates;
 
   try {
     const data = await fetchGraphQL<GetGrilleSlotsData>(
@@ -32,10 +32,9 @@ export default async function GrillePage() {
       { dateDebut: weekDates[0], dateFin: weekDates[6] },
       { next: { revalidate: 3600 } },
     );
-    slots     = transformGrilleSlots(data);
-    usedDates = weekDates;
+    slots = transformGrilleSlots(data);
   } catch {
-    // fallback mock — usedDates reste MOCK_WEEK_DATES
+    // WP indisponible — grille vide
   }
 
   const todayStr    = new Date().toISOString().split('T')[0];

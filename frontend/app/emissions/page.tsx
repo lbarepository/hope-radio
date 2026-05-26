@@ -2,7 +2,6 @@ import { fetchGraphQL }                                           from '@/lib/wo
 import { GET_EMISSION_CATEGORIES, GET_EMISSIONS_ALL }             from '@/graphql/emissions';
 import type { GetEmissionCategoriesData, GetEmissionsData }       from '@/graphql/emissions';
 import { transformEmissions }                                     from '@/app/data/emissions/transformer';
-import { MOCK_EMISSIONS, MOCK_EMISSION_CATEGORIES }               from '@/app/data/emissions/mock-emissions';
 import { loadMoreEmissions }                                      from './actions';
 import EmissionsClient                                            from '@/components/emissions/EmissionsClient';
 
@@ -23,13 +22,12 @@ export default async function EmissionsPage() {
   const categories =
     categoriesResult.status === 'fulfilled'
       ? categoriesResult.value.emissionCategories.nodes
-      : MOCK_EMISSION_CATEGORIES;
-
+      : [];
 
   const { cards: initialCards, pageInfo: initialPageInfo } =
     emissionsResult.status === 'fulfilled'
       ? transformEmissions(emissionsResult.value)
-      : transformEmissions(MOCK_EMISSIONS);
+      : { cards: [], pageInfo: { hasNextPage: false, endCursor: null } };
 
   return (
     <main className="bg-secondary min-h-screen py-16">

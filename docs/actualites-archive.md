@@ -6,6 +6,7 @@ Afficher la liste des articles via wpgraphql
 * Pouvoir filtrer par catégories
 
 ### Card article
+
 Un item d'article est composé de : 
 * image à la une
 * Titre 

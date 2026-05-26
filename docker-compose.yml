@@ -41,6 +41,7 @@ services:
         define('WP_DEBUG_DISPLAY', false);
         /* Autoriser les requêtes cross-origin depuis Next.js */
         define('GRAPHQL_DEBUG', true);
+        define('REVALIDATE_SECRET_KEY', '5867f6481ec45f9041f19ebb5e7f9994923070055635a4cf59fb1866c68b1a19');
     volumes:
       # Thème headless custom (à créer dans ./wordpress/themes/hope-radio)
       - ./wordpress/themes/hope-radio:/var/www/html/wp-content/themes/hope-radio

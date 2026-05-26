@@ -2,7 +2,6 @@ import { fetchGraphQL }                                             from '@/lib/
 import { GET_ACTUALITE_CATEGORIES, GET_ACTUALITES_ARCHIVE }        from '@/graphql/actualites';
 import type { GetActualiteCategoriesData, GetActualiteArchiveData } from '@/graphql/actualites';
 import { transformActualitesArchive }                              from '@/app/data/actualites/transformer';
-import { MOCK_ACTUALITE_CATEGORIES, MOCK_ACTUALITES_ARCHIVE }      from '@/app/data/actualites/mock-actualites';
 import { loadMoreActualites }                                      from './actions';
 import ActualitesClient                                            from '@/components/actualites/ActualitesClient';
 
@@ -23,12 +22,12 @@ export default async function ActualitesPage() {
   const categories =
     categoriesResult.status === 'fulfilled'
       ? categoriesResult.value.categories.nodes
-      : MOCK_ACTUALITE_CATEGORIES;
+      : [];
 
   const { cards: initialCards, pageInfo: initialPageInfo } =
     postsResult.status === 'fulfilled'
       ? transformActualitesArchive(postsResult.value)
-      : transformActualitesArchive(MOCK_ACTUALITES_ARCHIVE);
+      : { cards: [], pageInfo: { hasNextPage: false, endCursor: null } };
 
   return (
     <main className="bg-primary min-h-screen py-16">

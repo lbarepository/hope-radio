@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
-import { fetchGraphQL }                              from '@/lib/wordpress';
-import { MOCK_GRILLE_SLOTS, transformGrilleSlots }   from '@/app/data';
-import type { EmissionSlot }                         from '@/app/data';
-import { GET_GRILLE_SLOTS }                          from '@/graphql/grille';
-import type { GetGrilleSlotsData }                   from '@/graphql/grille';
+import { fetchGraphQL }                    from '@/lib/wordpress';
+import { transformGrilleSlots }           from '@/app/data';
+import type { EmissionSlot }              from '@/app/data';
+import { GET_GRILLE_SLOTS }               from '@/graphql/grille';
+import type { GetGrilleSlotsData }        from '@/graphql/grille';
 import DecouvrirSlider                               from './DecouvrirSlider';
 
 // ─── Props ────────────────────────────────────────────────────────────────────
@@ -30,7 +30,7 @@ export default async function DecouvrirSection({
     );
     slots = transformGrilleSlots(data);
   } catch {
-    slots = transformGrilleSlots(MOCK_GRILLE_SLOTS);
+    // WP indisponible — section masquée
   }
 
   if (slots.length === 0) return null;

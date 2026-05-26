@@ -1,13 +1,47 @@
-interface ActualitePageProps {
+import { notFound }      from 'next/navigation';
+import type { Metadata } from 'next';
+
+import { fetchGraphQL }                from '@/lib/wordpress';
+import { GET_ACTUALITE_BY_SLUG }       from '@/graphql/actualites';
+import type { GetActualiteBySlugData } from '@/graphql/actualites';
+import { transformActualiteDetail }    from '@/app/data/actualites/transformer';
+import ArticleDetail                   from '@/components/actualites/ArticleDetail';
+
+interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export default async function ActualitePage({ params }: ActualitePageProps) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  try {
+    const data = await fetchGraphQL<GetActualiteBySlugData>(
+      GET_ACTUALITE_BY_SLUG,
+      { slug },
+    );
+    return { title: data.post?.title ?? 'Actualité' };
+  } catch {
+    return { title: 'Actualité' };
+  }
+}
 
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      HOPE RADIO — ACTUALITÉ : {slug}
-    </div>
-  );
+export default async function ActualitePage({ params }: Props) {
+  const { slug } = await params;
+  console.log('Fetching actualité with slug:', slug);
+  console.log(slug)
+
+  let data: GetActualiteBySlugData;
+  try {
+    data = await fetchGraphQL<GetActualiteBySlugData>(
+      GET_ACTUALITE_BY_SLUG,
+      { slug },
+      { next: { revalidate: 3600 } },
+    );
+  } catch {
+    notFound();
+  }
+
+  const article = transformActualiteDetail(data!);
+  if (!article) notFound();
+
+  return <ArticleDetail article={article} />;
 }

@@ -3,7 +3,7 @@
 // Ce fichier est le seul point autorisé à mapper la shape de l'API
 // vers le type interne ActualiteCard utilisé par ActualitesSection.
 
-import type { GetActualitesData, GetActualiteArchiveData, ActualitePageInfo } from '@/graphql/actualites';
+import type { GetActualitesData, GetActualiteArchiveData, ActualitePageInfo, GetActualiteBySlugData } from '@/graphql/actualites';
 
 export type { ActualitePageInfo };
 
@@ -56,6 +56,30 @@ export function transformActualites(data: GetActualitesData): ActualiteCard[] {
   }));
 }
 
+// ── Single article ────────────────────────────────────────────────────────────
+
+export interface ActualiteDetail {
+  title:    string;
+  content:  string;
+  category: string;
+  image: { url: string; alt: string } | null;
+  uri:      string;
+}
+
+export function transformActualiteDetail(data: GetActualiteBySlugData): ActualiteDetail | null {
+  const node = data.post;
+  if (!node) return null;
+  return {
+    title:    node.title,
+    content:  node.content ?? '',
+    category: node.categories.nodes[0]?.name ?? '',
+    image:    node.featuredImage
+      ? { url: node.featuredImage.node.sourceUrl, alt: node.featuredImage.node.altText || node.title }
+      : null,
+    uri: node.uri,
+  };
+}
+
 export function transformActualitesArchive(data: GetActualiteArchiveData): {
   cards:    ActualiteArchiveCard[];
   pageInfo: ActualitePageInfo;
@@ -69,7 +93,7 @@ export function transformActualitesArchive(data: GetActualiteArchiveData): {
       url: node.featuredImage?.node.sourceUrl ?? FALLBACK_ARCHIVE_IMAGE,
       alt: node.featuredImage?.node.altText   ?? node.title,
     },
-    uri: node.uri,
+    uri: `/actualite/${node.slug}`,
   }));
   return { cards, pageInfo: data.posts.pageInfo };
 }
