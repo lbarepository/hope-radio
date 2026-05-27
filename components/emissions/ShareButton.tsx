@@ -104,19 +104,8 @@ export default function ShareButton({ title }: Props) {
             className="relative z-10 bg-white rounded-[20px] p-8 w-full max-w-sm shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Bouton fermer */}
-            <button
-              onClick={() => setOpen(false)}
-              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer text-gray-500"
-              aria-label="Fermer"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                <path d="M18 6L6 18M6 6l12 12"/>
-              </svg>
-            </button>
-
             {/* En-tête */}
-            <h2 className="font-nav font-[900] text-primary text-xl uppercase mb-6">
+            <h2 className="font-nav font-[900] text-primary text-xl uppercase mb-6" style={{ paddingRight: '20px', lineHeight: '1.2' }}>
               Partager l&apos;émission {title}
             </h2>
 
@@ -141,6 +130,16 @@ export default function ShareButton({ title }: Props) {
                 </li>
               ))}
             </ul>
+
+            {/* Bouton fermer */}
+            <div className="flex justify-center mt-6">
+              <button
+                onClick={() => setOpen(false)}
+                className="font-button font-semibold inline-flex items-center gap-2 rounded-[30px] border border-gray-300 bg-transparent text-gray-500 text-sm h-[44px] px-6 hover:bg-gray-100 transition-colors cursor-pointer"
+              >
+                Fermer
+              </button>
+            </div>
           </div>
         </div>
       )}
