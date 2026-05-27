@@ -82,7 +82,7 @@ export default function ShareButton({ title }: Props) {
       {/* Bouton déclencheur */}
       <button
         onClick={() => setOpen(true)}
-        className="font-button font-semibold inline-flex items-center gap-3 rounded-[30px] border border-white bg-transparent text-white text-sm h-[50px] px-6 whitespace-nowrap hover:bg-primary transition-colors cursor-pointer"
+        className="font-button font-semibold inline-flex items-center gap-3 rounded-[30px] border border-white bg-transparent text-white text-sm h-[50px] px-6 whitespace-nowrap hover:bg-primary hover:border-primary transition-colors cursor-pointer"
       >
         Partager
         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -107,7 +107,7 @@ export default function ShareButton({ title }: Props) {
             {/* En-tête */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-nav font-[900] text-primary text-xl uppercase">
-                Partager
+                Partager l&apos;émission {title}
               </h2>
               <button
                 onClick={() => setOpen(false)}
