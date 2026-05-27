@@ -273,7 +273,7 @@ acf_add_local_field_group([
 
 acf_add_local_field_group([
     'key'      => 'group_promotions',
-    'title'    => 'Promotions',
+    'title'    => 'Général',
     'fields'   => [
         [
             'key'   => 'field_tab_promotions',
@@ -332,6 +332,49 @@ acf_add_local_field_group([
                     'label' => 'Lien',
                     'name'  => 'lien',
                     'type'  => 'url',
+                ],
+            ],
+        ],
+        [
+            'key'   => 'field_tab_faq',
+            'label' => 'FAQ',
+            'type'  => 'tab',
+        ],
+        [
+            'key'           => 'field_faq_label',
+            'label'         => 'Label (ex: Vous avez une question ?)',
+            'name'          => 'faq_label',
+            'type'          => 'text',
+            'default_value' => 'Vous avez une question ?',
+        ],
+        [
+            'key'   => 'field_faq_description',
+            'label' => 'Description',
+            'name'  => 'faq_description',
+            'type'  => 'textarea',
+            'rows'  => 3,
+        ],
+        [
+            'key'        => 'field_faq',
+            'label'      => 'Questions / Réponses',
+            'name'       => 'faq',
+            'type'       => 'repeater',
+            'layout'     => 'block',
+            'sub_fields' => [
+                [
+                    'key'      => 'field_faq_question',
+                    'label'    => 'Question',
+                    'name'     => 'question',
+                    'type'     => 'text',
+                    'required' => 1,
+                ],
+                [
+                    'key'      => 'field_faq_reponse',
+                    'label'    => 'Réponse',
+                    'name'     => 'reponse',
+                    'type'     => 'textarea',
+                    'rows'     => 4,
+                    'required' => 1,
                 ],
             ],
         ],
@@ -465,6 +508,48 @@ add_action('graphql_register_types', function () {
                     'lien'      => $row['lien'] ?? null,
                 ];
             }, $rows);
+        },
+    ]);
+});
+
+// Expose les données FAQ via WPGraphQL.
+// Le resolver lit les champs ACF faq_label, faq_description et le repeater faq
+// depuis les options du thème (même pattern que bannieres).
+add_action('graphql_register_types', function () {
+    register_graphql_object_type('FaqItem', [
+        'description' => 'Question / réponse de la FAQ',
+        'fields'      => [
+            'question' => ['type' => 'String'],
+            'reponse'  => ['type' => 'String'],
+        ],
+    ]);
+
+    register_graphql_object_type('FaqData', [
+        'description' => 'Données complètes de la FAQ (label, description, items)',
+        'fields'      => [
+            'label'       => ['type' => 'String'],
+            'description' => ['type' => 'String'],
+            'items'       => ['type' => ['list_of' => 'FaqItem']],
+        ],
+    ]);
+
+    register_graphql_field('RootQuery', 'faqData', [
+        'type'        => 'FaqData',
+        'description' => 'Données FAQ gérées via Options du thème',
+        'resolve'     => function () {
+            $rows  = get_field('faq', 'option');
+            $items = [];
+            if (!empty($rows) && is_array($rows)) {
+                $items = array_map(fn($r) => [
+                    'question' => $r['question'] ?? null,
+                    'reponse'  => $r['reponse']  ?? null,
+                ], $rows);
+            }
+            return [
+                'label'       => get_field('faq_label',       'option') ?: null,
+                'description' => get_field('faq_description', 'option') ?: null,
+                'items'       => $items,
+            ];
         },
     ]);
 });
