@@ -159,11 +159,13 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
                             {item.date}
                           </span>
                         )}
-                        {isActive && item.excerpt && (
+                        {isActive && (
                           <div className="flex gap-4 flex-col md:flex-row">
-                            <p className="text-[12px] mt-1 leading-tight text-justify">
-                              {item.excerpt}
-                            </p>
+                            {item.excerpt && (
+                              <p className="text-[12px] mt-1 leading-tight text-justify">
+                                {item.excerpt}
+                              </p>
+                            )}
                             <div className="flex justify-end mt-2">
                             {item.lien ? (
                               <Link
