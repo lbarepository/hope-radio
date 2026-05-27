@@ -34,6 +34,10 @@ export interface GetAgendaByCategoryData {
   } | null;
 }
 
+export interface GetAgendaItemBySlugData {
+  agendaItem: AgendaItemNode | null;
+}
+
 // ─── Fragment ─────────────────────────────────────────────────────────────────
 
 // agendaInfos (dateEvenement, lien) disponible après déploiement de acf-fields.php
@@ -89,6 +93,14 @@ export const GET_AGENDA_ITEMS_BY_CATEGORY = `
           ${AGENDA_NODE_FIELDS}
         }
       }
+    }
+  }
+`;
+
+export const GET_AGENDA_ITEM_BY_SLUG = `
+  query GetAgendaItemBySlug($slug: ID!) {
+    agendaItem(id: $slug, idType: SLUG) {
+      ${AGENDA_NODE_FIELDS}
     }
   }
 `;
