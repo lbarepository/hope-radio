@@ -104,21 +104,21 @@ export default function ShareButton({ title }: Props) {
             className="relative z-10 bg-white rounded-[20px] p-8 w-full max-w-sm shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Bouton fermer */}
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer text-gray-500"
+              aria-label="Fermer"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+
             {/* En-tête */}
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="font-nav font-[900] text-primary text-xl uppercase">
-                Partager l&apos;émission {title}
-              </h2>
-              <button
-                onClick={() => setOpen(false)}
-                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer text-gray-500"
-                aria-label="Fermer"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                  <path d="M18 6L6 18M6 6l12 12"/>
-                </svg>
-              </button>
-            </div>
+            <h2 className="font-nav font-[900] text-primary text-xl uppercase mb-6">
+              Partager l&apos;émission {title}
+            </h2>
 
             {/* Réseaux */}
             <ul className="flex flex-col gap-3">
