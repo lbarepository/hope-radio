@@ -195,8 +195,7 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
                             {item.date}
                           </span>
                         )}
-                        {isActive && (
-                          <div className="flex gap-4 flex-col md:flex-row">
+                        <div className="flex gap-4 flex-col md:flex-row">
                             {item.excerpt && (
                               <p className="text-[12px] mt-1 leading-tight text-justify">
                                 {item.excerpt}
@@ -206,12 +205,11 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
                               <Link
                                 href={`/agenda/${item.slug}`}
                                 className="font-button font-semibold inline-flex items-center rounded-[30px] bg-primary text-white text-sm h-[40px] px-5 whitespace-nowrap hover:bg-primary/90 transition-colors"
-                              >
+                              > 
                                 Découvrir
                               </Link>
+                            </div>
                           </div>
-                          </div>
-                        )}
                         {/* Bouton uniquement sur le slide actif */}
                       
                       </div>
