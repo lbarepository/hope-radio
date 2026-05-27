@@ -1,17 +1,28 @@
 import type {
   GetAgendaItemsData,
   GetAgendaByCategoryData,
+  GetAgendaItemBySlugData,
   AgendaItemNode,
 } from '@/graphql/agenda';
 
 export interface AgendaCard {
   id:       string;
+  slug:     string;
   title:    string;
   date:     string | null;
   excerpt:  string;
   lien:     string | null;
   image:    { url: string; alt: string } | null;
   category: string | null;
+}
+
+export interface AgendaDetail {
+  title:    string;
+  content:  string;
+  category: string;
+  date:     string | null;
+  lien:     string | null;
+  image:    { url: string; alt: string } | null;
 }
 
 function stripHtml(html: string | null): string {
@@ -29,6 +40,7 @@ function formatDate(raw: string | null): string | null {
 function nodeToCard(node: AgendaItemNode): AgendaCard {
   return {
     id:       node.id,
+    slug:     node.slug,
     title:    node.title,
     date:     formatDate(node.agendaInfos?.dateEvenement ?? null),
     excerpt:  stripHtml(node.content),
@@ -46,4 +58,19 @@ export function transformAgendaItems(data: GetAgendaItemsData): AgendaCard[] {
 
 export function transformAgendaByCategory(data: GetAgendaByCategoryData): AgendaCard[] {
   return data.agendaCategorie?.agendaItems.nodes.map(nodeToCard) ?? [];
+}
+
+export function transformAgendaDetail(data: GetAgendaItemBySlugData): AgendaDetail | null {
+  const node = data.agendaItem;
+  if (!node) return null;
+  return {
+    title:    node.title,
+    content:  node.content ?? '',
+    category: node.agendaCategories.nodes[0]?.name ?? '',
+    date:     formatDate(node.agendaInfos?.dateEvenement ?? null),
+    lien:     node.agendaInfos?.lien ?? null,
+    image:    node.featuredImage
+      ? { url: node.featuredImage.node.sourceUrl, alt: node.featuredImage.node.altText || node.title }
+      : null,
+  };
 }

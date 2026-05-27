@@ -199,20 +199,12 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
                               </p>
                             )}
                             <div className="flex justify-end mt-2">
-                            {item.lien ? (
                               <Link
-                                href={item.lien}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                href={`/agenda/${item.slug}`}
                                 className="font-button font-semibold inline-flex items-center rounded-[30px] bg-primary text-white text-sm h-[40px] px-5 whitespace-nowrap hover:bg-primary/90 transition-colors"
                               >
                                 Découvrir
                               </Link>
-                            ) : (
-                              <span className="font-button font-semibold inline-flex items-center rounded-[30px] bg-primary text-white text-sm h-[40px] px-5 whitespace-nowrap cursor-default">
-                                Découvrir
-                              </span>
-                            )}
                           </div>
                           </div>
                         )}
