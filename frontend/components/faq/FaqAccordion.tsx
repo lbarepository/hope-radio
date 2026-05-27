@@ -38,7 +38,7 @@ export default function FaqAccordion({ items }: Props) {
               onClick={() => setOpenIndex(isOpen ? null : i)}
               className="w-full flex items-center justify-between px-[30px] py-[30px] text-left cursor-pointer"
             >
-              <span className="font-heading font-bold text-[20px] leading-[25px] text-black pr-4">
+              <span className="font-heading font-bold text-[20px] text-secondary leading-[25px] text-black pr-4">
                 {item.question}
               </span>
               <ArrowIcon open={isOpen} />

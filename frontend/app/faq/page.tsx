@@ -42,7 +42,7 @@ export default async function FaqPage() {
               </div>
             )}
             {description && (
-              <div className="md:w-2/3 font-heading font-bold text-[16px] leading-[25px] text-white">
+              <div className="md:w-2/3 font-bold text-[16px] leading-[25px] text-white">
                 {description}
               </div>
             )}
