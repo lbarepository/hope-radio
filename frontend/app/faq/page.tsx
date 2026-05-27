@@ -37,7 +37,7 @@ export default async function FaqPage() {
         {(label || description) && (
           <div className="flex flex-col md:flex-row gap-8 mb-12">
             {label && (
-              <div className="md:w-1/3 font-nav font-bold text-[32px] leading-[100%] text-white uppercase">
+              <div className="md:w-1/3 font-bold text-[32px] leading-[100%] text-white uppercase">
                 {label}
               </div>
             )}
