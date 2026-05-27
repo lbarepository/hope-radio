@@ -81,7 +81,7 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
     <div className="w-full">
       {/* ── Filtre catégories ── */}
       {categories.length > 0 && (
-        <div className="flex items-center justify-center gap-3 flex-wrap mb-10 px-6">
+        <div className="max-w-[1139px] mx-auto flex items-center justify-center gap-3 flex-wrap mb-10 px-6">
           <button
             onClick={() => handleCategory(null)}
             className={`font-heading font-bold text-sm px-6 py-2 rounded-full border transition-colors cursor-pointer ${
@@ -122,7 +122,7 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
               <button
                 ref={prevRef}
                 aria-label="Précédent"
-                className="agenda-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white/50 cursor-pointer hover:bg-white/70 transition-colors"
+                className="agenda-prev absolute left-5 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white/50 cursor-pointer hover:bg-white/70 transition-colors"
               >
                 <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
                   <path d="M24 10L14 20L24 30" stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -131,7 +131,7 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
               <button
                 ref={nextRef}
                 aria-label="Suivant"
-                className="agenda-next absolute right-0 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white/50 cursor-pointer hover:bg-white/70 transition-colors"
+                className="agenda-next absolute right-5 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white/50 cursor-pointer hover:bg-white/70 transition-colors"
               >
                 <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
                   <path d="M16 10L26 20L16 30" stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
