@@ -114,7 +114,7 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
           Aucun événement dans cette catégorie.
         </p>
       ) : (
-        <div ref={containerRef} className={`agenda-slider relative px-6 lg:px-12 transition-opacity ${isPending ? 'opacity-50' : 'opacity-100'}`}>
+        <div ref={containerRef} className={`agenda-slider relative px-6 lg:px-0 transition-opacity ${isPending ? 'opacity-50' : 'opacity-100'}`}>
 
           {/* ── Flèches custom — desktop uniquement ── */}
           {!isMobile && (
