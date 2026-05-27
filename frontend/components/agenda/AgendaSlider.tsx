@@ -184,7 +184,7 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
                     </div>
 
                     {/* Contenu — 30% */}
-                    <div className="flex flex-col justify-between px-5 py-4 flex-1 overflow-hidden">
+                    <div className="flex flex-col justify-between px-5 pt-4 flex-1 overflow-hidden">
                       <div className="flex flex-col gap-1 overflow-hidden">
                         
                         <div className="font-bold text-primary text-[20px] leading-tight uppercase">
