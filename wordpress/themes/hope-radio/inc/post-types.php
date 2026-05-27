@@ -98,4 +98,22 @@ add_action('init', function () {
         'graphql_single_name' => 'agendaItem',
         'graphql_plural_name' => 'agendaItems',
     ]);
+
+    register_taxonomy('agenda_categorie', 'agenda', [
+        'labels' => [
+            'name'          => __('Catégories agenda', 'hope-radio'),
+            'singular_name' => __('Catégorie agenda', 'hope-radio'),
+            'add_new_item'  => __('Ajouter une catégorie', 'hope-radio'),
+            'edit_item'     => __('Modifier la catégorie', 'hope-radio'),
+            'not_found'     => __('Aucune catégorie trouvée', 'hope-radio'),
+        ],
+        'hierarchical'        => true,
+        'show_ui'             => true,
+        'show_admin_column'   => true,
+        'show_in_rest'        => true,
+        'show_in_graphql'     => true,
+        'graphql_single_name' => 'agendaCategorie',
+        'graphql_plural_name' => 'agendaCategories',
+        'rewrite'             => ['slug' => 'agenda-categorie'],
+    ]);
 });
