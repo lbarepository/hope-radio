@@ -112,3 +112,50 @@ export const GET_EMISSIONS_BY_CATEGORY = `
     }
   }
 `;
+
+// ─── Single emission ──────────────────────────────────────────────────────────
+
+export interface EmissionDetailNode {
+  id:            string;
+  title:         string;
+  slug:          string;
+  uri:           string;
+  content:       string | null;
+  excerpt:       string | null;
+  featuredImage: { node: { sourceUrl: string; altText: string } } | null;
+  emissionCategories: { nodes: { name: string; slug: string }[] };
+  animateurs:    { prenom: string; nom: string }[];
+}
+
+export interface GetEmissionBySlugData {
+  emission: EmissionDetailNode | null;
+}
+
+export const GET_EMISSION_BY_SLUG = `
+  query GetEmissionBySlug($slug: ID!) {
+    emission(id: $slug, idType: SLUG) {
+      id
+      title
+      slug
+      uri
+      content
+      excerpt
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+        }
+      }
+      emissionCategories {
+        nodes {
+          name
+          slug
+        }
+      }
+      animateurs {
+        prenom
+        nom
+      }
+    }
+  }
+`;

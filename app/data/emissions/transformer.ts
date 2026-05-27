@@ -1,4 +1,4 @@
-import type { GetEmissionsData } from '@/graphql/emissions';
+import type { GetEmissionsData, GetEmissionBySlugData } from '@/graphql/emissions';
 
 export interface EmissionCard {
   id:        string;
@@ -43,5 +43,41 @@ export function transformEmissions(data: GetEmissionsData): {
       hasNextPage: data.emissions.pageInfo.hasNextPage,
       endCursor:   data.emissions.pageInfo.endCursor,
     },
+  };
+}
+
+// ─── Single emission ──────────────────────────────────────────────────────────
+
+export interface EmissionDetail {
+  title:      string;
+  slug:       string;
+  uri:        string;
+  content:    string;
+  excerpt:    string;
+  animateurs: string;
+  category:   string | null;
+  image:      { url: string; alt: string } | null;
+}
+
+export function transformEmissionDetail(data: GetEmissionBySlugData): EmissionDetail | null {
+  const node = data.emission;
+  if (!node) return null;
+
+  const animateurs = node.animateurs
+    .map((a) => `${a.prenom} ${a.nom}`.trim())
+    .filter(Boolean)
+    .join(', ');
+
+  return {
+    title:      node.title,
+    slug:       node.slug,
+    uri:        node.uri,
+    content:    node.content  ?? '',
+    excerpt:    node.excerpt ? node.excerpt.replace(/<[^>]*>/g, '').trim() : '',
+    animateurs,
+    category:   node.emissionCategories.nodes[0]?.name ?? null,
+    image:      node.featuredImage
+      ? { url: node.featuredImage.node.sourceUrl, alt: node.featuredImage.node.altText || node.title }
+      : null,
   };
 }
