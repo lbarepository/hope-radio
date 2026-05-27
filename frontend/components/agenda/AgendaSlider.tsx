@@ -196,7 +196,7 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
                           </span>
                         )}
                         <div className="flex gap-4 flex-col md:flex-row">
-                            {item.excerpt && (
+                            {item.excerpt && isActive && (
                               <p className="text-[12px] mt-1 leading-tight text-justify">
                                 {item.excerpt}
                               </p>
