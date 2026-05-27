@@ -32,7 +32,7 @@ export default async function AgendaPage() {
   return (
     <main className="min-h-screen py-16" style={{ background: '#72004A' }}>
       <div className="max-w-[1139px] mx-auto">
-        <h1 className="font-heading font-bold text-[64px] md:text-[88px] leading-[90%] text-white text-center uppercase mb-10">
+        <h1 className="font-nav font-bold text-[64px] md:text-[88px] leading-[90%] text-white text-center uppercase mb-10">
           Agenda
         </h1>
 
