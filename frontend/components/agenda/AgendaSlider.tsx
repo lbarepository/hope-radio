@@ -153,8 +153,12 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
             }}
             observer
             observeParents
+            threshold={10}
             onSwiper={(swiper) => { swiperRef.current = swiper; }}
-            onActiveIndexChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+            onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+            onTouchMove={(swiper) => {
+              if (swiper.activeIndex !== activeIndex) setActiveIndex(swiper.activeIndex);
+            }}
           >
             {items.map((item, i) => {
               const isActive = i === activeIndex;
