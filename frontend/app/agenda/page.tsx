@@ -35,13 +35,13 @@ export default async function AgendaPage() {
         <h1 className="font-nav font-bold text-[64px] md:text-[88px] leading-[90%] text-white text-center uppercase mb-10">
           Agenda
         </h1>
-
-        <AgendaSlider
-          initialItems={initialItems}
-          categories={categories}
-          loadByCategory={loadAgendaByCategory}
-        />
       </div>
+
+      <AgendaSlider
+        initialItems={initialItems}
+        categories={categories}
+        loadByCategory={loadAgendaByCategory}
+      />
     </main>
   );
 }
