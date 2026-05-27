@@ -59,6 +59,34 @@ export function isExternalUrl(url: string): boolean {
   }
 }
 
+const GRAPHQL_TIMEOUT_MS = 15_000;
+const GRAPHQL_RETRIES    = 1;
+
+async function fetchGraphQLOnce<T>(
+  endpoint: string,
+  query: string,
+  variables: Record<string, unknown> | undefined,
+  fetchOptions: RequestInit,
+): Promise<T> {
+  const fetchPromise = fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query, variables }),
+    ...fetchOptions,
+  }).then(async (res) => {
+    if (!res.ok) throw new Error(`GraphQL request failed: ${res.status}`);
+    const json = await res.json();
+    if (json.errors) throw new Error(json.errors[0].message);
+    return json.data as T;
+  });
+
+  const timeoutPromise = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error('GraphQL timeout')), GRAPHQL_TIMEOUT_MS)
+  );
+
+  return Promise.race([fetchPromise, timeoutPromise]);
+}
+
 export async function fetchGraphQL<T>(
   query: string,
   variables?: Record<string, unknown>,
@@ -75,22 +103,15 @@ export async function fetchGraphQL<T>(
     ? {}
     : { next: { revalidate: 3600 } };
 
-  const fetchPromise = fetch(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query, variables }),
-    ...defaultCache,
-    ...fetchOptions,
-  }).then(async (res) => {
-    if (!res.ok) throw new Error(`GraphQL request failed: ${res.status}`);
-    const json = await res.json();
-    if (json.errors) throw new Error(json.errors[0].message);
-    return json.data as T;
-  });
+  const options: RequestInit = { ...defaultCache, ...fetchOptions };
 
-  const timeoutPromise = new Promise<never>((_, reject) =>
-    setTimeout(() => reject(new Error('GraphQL timeout')), 5000)
-  );
-
-  return Promise.race([fetchPromise, timeoutPromise]);
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= GRAPHQL_RETRIES; attempt++) {
+    try {
+      return await fetchGraphQLOnce<T>(endpoint, query, variables, options);
+    } catch (err) {
+      lastError = err;
+    }
+  }
+  throw lastError;
 }
