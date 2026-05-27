@@ -176,7 +176,7 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
                                 Découvrir
                               </Link>
                             ) : (
-                              <span className="font-button font-semibold inline-flex items-center rounded-[30px] bg-primary/30 text-primary text-sm h-[40px] px-5 whitespace-nowrap cursor-default">
+                              <span className="font-button font-semibold inline-flex items-center rounded-[30px] bg-primary text-white text-sm h-[40px] px-5 whitespace-nowrap cursor-default">
                                 Découvrir
                               </span>
                             )}
