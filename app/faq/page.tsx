@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 
-import { fetchGraphQL }   from '@/lib/wordpress';
-import { GET_FAQ }        from '@/graphql/faq';
+import { fetchGraphQL }    from '@/lib/wordpress';
+import { GET_FAQ }         from '@/graphql/faq';
 import type { GetFaqData } from '@/graphql/faq';
+
+export const revalidate = 0;
 import FaqAccordion       from '@/components/faq/FaqAccordion';
 
 export const metadata: Metadata = { title: 'FAQ — Hope Radio' };
@@ -13,7 +15,7 @@ export default async function FaqPage() {
     const data = await fetchGraphQL<GetFaqData>(
       GET_FAQ,
       {},
-      { next: { revalidate: 3600 } },
+      { cache: 'no-store' },
     );
     faqData = data.faqData;
   } catch {
