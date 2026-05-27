@@ -20,19 +20,38 @@ interface Props {
 }
 
 const FALLBACK_IMAGE = 'https://placehold.co/560x420/72004A/FFFFFF?text=Agenda';
+const SPACE_BETWEEN  = 16;
+
+function computeWidths(containerWidth: number) {
+  // 2.5 slides visibles : active (2x) + 1 inactive + ½ inactive = 3.5 unités + 2 gaps
+  const inactive = (containerWidth - SPACE_BETWEEN * 2) / 3.5;
+  return { inactive: Math.floor(inactive), active: Math.floor(inactive * 2) };
+}
 
 export default function AgendaSlider({ initialItems, categories, loadByCategory }: Props) {
-  const [items, setItems]           = useState<AgendaCard[]>(initialItems);
-  const [activeSlug, setActiveSlug] = useState<string | null>(null);
+  const [items, setItems]             = useState<AgendaCard[]>(initialItems);
+  const [activeSlug, setActiveSlug]   = useState<string | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPending, startTransition] = useTransition();
-  const swiperRef = useRef<SwiperClass | null>(null);
+  const [isPending, startTransition]  = useTransition();
+  const [widths, setWidths]           = useState({ inactive: 280, active: 560 });
+  const swiperRef    = useRef<SwiperClass | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Recalcule les largeurs Swiper après que React a appliqué les nouveaux styles
+  // Calcul responsive : toujours 2.5 slides visibles
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver(([entry]) => {
+      setWidths(computeWidths(entry.contentRect.width));
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Recalcule les positions Swiper après changement de largeur ou de slide actif
   useEffect(() => {
     const timer = setTimeout(() => swiperRef.current?.update(), 50);
     return () => clearTimeout(timer);
-  }, [activeIndex]);
+  }, [activeIndex, widths]);
 
   function handleCategory(slug: string | null) {
     if (slug === activeSlug) return;
@@ -85,11 +104,11 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
           Aucun événement dans cette catégorie.
         </p>
       ) : (
-        <div className={`agenda-slider px-6 lg:px-12 transition-opacity ${isPending ? 'opacity-50' : 'opacity-100'}`}>
+        <div ref={containerRef} className={`agenda-slider px-6 lg:px-12 transition-opacity ${isPending ? 'opacity-50' : 'opacity-100'}`}>
           <Swiper
             modules={[Navigation]}
             slidesPerView="auto"
-            spaceBetween={16}
+            spaceBetween={SPACE_BETWEEN}
             navigation
             observer
             observeParents
@@ -105,6 +124,7 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
                 <SwiperSlide
                   key={item.id}
                   className={isActive ? 'is-active' : ''}
+                  style={{ width: isActive ? `${widths.active}px` : `${widths.inactive}px` }}
                 >
                   <div className="h-[420px] rounded-[16px] overflow-hidden flex flex-col bg-white">
                     {/* Image — 70% */}

@@ -184,19 +184,7 @@ body {
 }
 
 /* ── Agenda slider ─────────────────────────────────────────────────────────── */
+/* Les largeurs sont calculées dynamiquement dans AgendaSlider.tsx via ResizeObserver */
 .agenda-slider .swiper-slide {
-  width: 280px;
   transition: width 0.4s ease;
-}
-.agenda-slider .swiper-slide.is-active {
-  width: 560px;
-}
-
-@media (max-width: 768px) {
-  .agenda-slider .swiper-slide {
-    width: 200px;
-  }
-  .agenda-slider .swiper-slide.is-active {
-    width: calc(100vw - 48px);
-  }
 }
