@@ -121,7 +121,6 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
             navigation
             observer
             observeParents
-            allowTouchMove={isMobile}
             onSwiper={(swiper) => { swiperRef.current = swiper; }}
             onActiveIndexChange={(swiper) => setActiveIndex(swiper.activeIndex)}
           >
