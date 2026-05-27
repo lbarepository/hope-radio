@@ -189,9 +189,3 @@ body {
   transition: width 0.4s ease;
 }
 
-@media (max-width: 767px) {
-  .agenda-slider .swiper-button-next,
-  .agenda-slider .swiper-button-prev {
-    display: none;
-  }
-}

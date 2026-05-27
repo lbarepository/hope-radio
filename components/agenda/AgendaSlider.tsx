@@ -7,7 +7,6 @@ import type { Swiper as SwiperClass }                  from 'swiper';
 import Image                                           from 'next/image';
 import Link                                            from 'next/link';
 import 'swiper/css';
-import 'swiper/css/navigation';
 
 import { normalizeWpImageUrl } from '@/lib/wordpress';
 import type { AgendaCard }     from '@/app/data/agenda/transformer';
@@ -42,6 +41,8 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
   const [isMobile, setIsMobile]       = useState(false);
   const swiperRef    = useRef<SwiperClass | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const prevRef      = useRef<HTMLButtonElement | null>(null);
+  const nextRef      = useRef<HTMLButtonElement | null>(null);
 
   // Calcul responsive : 2.5 slides sur desktop, 1 slide sur mobile
   useEffect(() => {
@@ -113,14 +114,46 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
           Aucun événement dans cette catégorie.
         </p>
       ) : (
-        <div ref={containerRef} className={`agenda-slider px-6 lg:px-12 transition-opacity ${isPending ? 'opacity-50' : 'opacity-100'}`}>
+        <div ref={containerRef} className={`agenda-slider relative px-6 lg:px-12 transition-opacity ${isPending ? 'opacity-50' : 'opacity-100'}`}>
+
+          {/* ── Flèches custom — desktop uniquement ── */}
+          {!isMobile && (
+            <>
+              <button
+                ref={prevRef}
+                aria-label="Précédent"
+                className="agenda-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white/50 cursor-pointer hover:bg-white/70 transition-colors"
+              >
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                  <path d="M24 10L14 20L24 30" stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+              <button
+                ref={nextRef}
+                aria-label="Suivant"
+                className="agenda-next absolute right-0 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white/50 cursor-pointer hover:bg-white/70 transition-colors"
+              >
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                  <path d="M16 10L26 20L16 30" stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </>
+          )}
+
           <Swiper
             modules={[Navigation]}
             slidesPerView="auto"
             spaceBetween={SPACE_BETWEEN}
-            navigation
+            navigation={!isMobile ? { prevEl: prevRef.current, nextEl: nextRef.current } : false}
+            onBeforeInit={(swiper) => {
+              if (!isMobile && typeof swiper.params.navigation !== 'boolean' && swiper.params.navigation) {
+                swiper.params.navigation.prevEl = prevRef.current;
+                swiper.params.navigation.nextEl = nextRef.current;
+              }
+            }}
             observer
             observeParents
+            allowTouchMove={isMobile}
             onSwiper={(swiper) => { swiperRef.current = swiper; }}
             onActiveIndexChange={(swiper) => setActiveIndex(swiper.activeIndex)}
           >
