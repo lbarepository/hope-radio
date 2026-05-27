@@ -201,7 +201,7 @@ export default function AgendaSlider({ initialItems, categories, loadByCategory 
                                 {item.excerpt}
                               </p>
                             )}
-                            <div className="flex justify-end mt-2">
+                            <div className="flex self-end ">
                               <Link
                                 href={`/agenda/${item.slug}`}
                                 className="font-button font-semibold inline-flex items-center rounded-[30px] bg-primary text-white text-sm h-[40px] px-5 whitespace-nowrap hover:bg-primary/90 transition-colors"
