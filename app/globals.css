@@ -66,7 +66,8 @@
   --font-body: 'Century Gothic', sans-serif;
   --font-heading: 'Gravesend Sans', sans-serif;
   --font-nav: 'Copyright Radosaw ukasiewicz, radluka.com', serif;
-  --font-button: var(--font-archivo);
+  --font-button:  var(--font-archivo);
+  --font-poppins: var(--next-font-poppins);
 
   --color-primary: #720049;
   --color-primary-light: #B829D3;

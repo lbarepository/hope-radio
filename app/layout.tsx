@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo } from "next/font/google";
+import { Archivo, Poppins } from "next/font/google";
 import "./globals.css";
 /* import "swiper/css";
 import "swiper/css/effect-fade";
@@ -7,7 +7,8 @@ import "swiper/css/pagination";*/
 import Header from "@/components/layout/Header";
 import RadioPlayer from "@/components/player/RadioPlayer";
 
-const archivo = Archivo({ subsets: ["latin"], weight: ["600"], variable: "--font-archivo" });
+const archivo  = Archivo({ subsets: ["latin"], weight: ["600"], variable: "--font-archivo" });
+const poppins  = Poppins({ subsets: ["latin"], weight: ["400"], variable: "--next-font-poppins" });
 
 const streamOrigin = (() => {
   try {
@@ -28,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`h-full antialiased ${archivo.variable}`}>
+    <html lang="fr" className={`h-full antialiased ${archivo.variable} ${poppins.variable}`}>
       <head>
         <link rel="preconnect" href={streamOrigin} />
         <link rel="dns-prefetch" href={streamOrigin} />
