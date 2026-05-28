@@ -207,6 +207,27 @@ acf_add_local_field_group([
     ],
 ]);
 
+acf_add_local_field_group([
+    'key'                => 'group_clip',
+    'title'              => 'Informations du clip',
+    'show_in_graphql'    => 1,
+    'graphql_field_name' => 'clipFields',
+    'fields'             => [
+        [
+            'key'                => 'field_clip_url',
+            'label'              => 'URL de la vidéo',
+            'name'               => 'clip_url',
+            'type'               => 'url',
+            'required'           => 1,
+            'show_in_graphql'    => 1,
+            'graphql_field_name' => 'clipUrl',
+        ],
+    ],
+    'location' => [
+        [['param' => 'post_type', 'operator' => '==', 'value' => 'clip']],
+    ],
+]);
+
 // ── Mise en avant (hero slider) ──────────────────────────────────────────────
 //
 // Ce field group est exposé via WPGraphQL for ACF.

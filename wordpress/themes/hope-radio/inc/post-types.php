@@ -99,6 +99,26 @@ add_action('init', function () {
         'graphql_plural_name' => 'agendaItems',
     ]);
 
+    register_post_type('clip', [
+        'labels' => [
+            'name'               => __('Clips', 'hope-radio'),
+            'singular_name'      => __('Clip', 'hope-radio'),
+            'add_new_item'       => __('Ajouter un clip', 'hope-radio'),
+            'edit_item'          => __('Modifier le clip', 'hope-radio'),
+            'not_found'          => __('Aucun clip trouvé', 'hope-radio'),
+            'not_found_in_trash' => __('Aucun clip dans la corbeille', 'hope-radio'),
+        ],
+        'public'              => true,
+        'has_archive'         => false,
+        'rewrite'             => ['slug' => 'clips'],
+        'supports'            => ['title', 'thumbnail'],
+        'menu_icon'           => 'dashicons-video-alt3',
+        'show_in_rest'        => false,
+        'show_in_graphql'     => true,
+        'graphql_single_name' => 'clip',
+        'graphql_plural_name' => 'clips',
+    ]);
+
     register_taxonomy('agenda_categorie', 'agenda', [
         'labels' => [
             'name'          => __('Catégories agenda', 'hope-radio'),

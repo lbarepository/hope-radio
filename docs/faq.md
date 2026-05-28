@@ -74,4 +74,4 @@ text-transform: capitalize;
 
 * Arrow down c'est le arrow up avec rotation de 90 degré
 * Entre la question et la réponse, une ligne horizontale de background black à 15%
-* La page a un fond image comme sur le composant HeroSlider.tsx
+* La page a un fond image comme sur le composant
