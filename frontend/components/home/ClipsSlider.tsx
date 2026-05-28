@@ -81,6 +81,11 @@ export default function ClipsSlider({ cards }: ClipsSliderProps) {
                   className="w-full h-full object-cover block"
                   draggable={false}
                 />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <svg width="28" height="35" viewBox="0 0 28 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M27.916 17.2576L-3.21267e-05 34.5151L-3.06331e-05 7.12466e-05L27.916 17.2576Z" fill="white"/>
+                  </svg>
+                </div>
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
                   <p className="text-white font-heading text-sm font-bold leading-tight uppercase m-0 line-clamp-2">
                     {clip.title}
