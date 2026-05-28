@@ -3,6 +3,7 @@ import ActualitesSection from '@/components/home/ActualitesSection';
 import DecouvrirSection  from '@/components/home/DecouvrirSection';
 import BanniereSection   from '@/components/banniere/BanniereSection';
 import ClipsSection      from '@/components/home/ClipsSection';
+import RadiosSection     from '@/components/home/RadiosSection';
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <DecouvrirSection />
       <BanniereSection />
       <ClipsSection />
+      <RadiosSection />
     </main>
   );
 }

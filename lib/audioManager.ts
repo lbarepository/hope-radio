@@ -5,8 +5,9 @@ export const STREAM_ORIGIN = (() => {
   try { return new URL(STREAM_BASE_URL).origin; } catch { return ''; }
 })();
 
-export function buildStreamUrl(): string {
-  return `${STREAM_BASE_URL}?t=${Date.now()}`;
+export function buildStreamUrl(url?: string | null): string {
+  const base = url ?? STREAM_BASE_URL;
+  return `${base}?t=${Date.now()}`;
 }
 
 let _audio: HTMLAudioElement | null = null;
