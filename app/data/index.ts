@@ -34,3 +34,7 @@ export type { BanniereCard }                  from './bannieres/transformer';
 export { MOCK_EMISSIONS, MOCK_EMISSION_CATEGORIES } from './emissions/mock-emissions';
 export { transformEmissions }                       from './emissions/transformer';
 export type { EmissionCard, EmissionPageInfo }      from './emissions/transformer';
+
+// Clips
+export { transformClips }  from './clips/transformer';
+export type { ClipCard }   from './clips/transformer';
