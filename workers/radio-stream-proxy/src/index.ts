@@ -28,19 +28,43 @@ export default {
       });
     }
 
-    const streamUrl =
-      country === 'CH'
+    // Allowlist of authorized streaming hostnames.
+    // Add a new entry here each time a radio station uses a different stream host.
+    const ALLOWED_STREAM_HOSTS = new Set([
+      'stream.hoperadio.fr',
+    ]);
+
+    let streamUrl: string;
+    const customStream = new URL(request.url).searchParams.get('stream');
+    if (customStream) {
+      let parsed: URL;
+      try { parsed = new URL(customStream); } catch {
+        return new Response('Bad Request', { status: 400 });
+      }
+      if (parsed.protocol !== 'https:' || !ALLOWED_STREAM_HOSTS.has(parsed.hostname.toLowerCase())) {
+        return new Response('Forbidden', { status: 403 });
+      }
+      streamUrl = parsed.toString();
+    } else {
+      streamUrl = country === 'CH'
         ? 'https://stream.hoperadio.fr/hoperadio-suisse'
         : 'https://stream.hoperadio.fr/hoperadio';
+    }
 
     const upstream = await fetch(streamUrl, {
       headers: {
         'User-Agent': request.headers.get('User-Agent') ?? 'Mozilla/5.0',
         'Icy-MetaData': '0',
       },
+      redirect: 'manual',
       // @ts-ignore — Cloudflare-specific option, disables edge caching
       cf: { cacheEverything: false },
     });
+
+    // Refuse to follow redirects — re-validate Location if needed to prevent allowlist bypass.
+    if (upstream.status >= 300 && upstream.status < 400) {
+      return new Response('Bad Gateway', { status: 502 });
+    }
 
     return new Response(upstream.body, {
       status: 200,

@@ -11,12 +11,14 @@ interface PlayerState {
   isPlaying: boolean;
   volume: number;
   meta: TrackMeta | null;
+  streamUrl: string | null;
   show: () => void;
   hide: () => void;
   toggle: () => void;
   setPlaying: (playing: boolean) => void;
   setVolume: (volume: number) => void;
   setMeta: (meta: TrackMeta) => void;
+  playStream: (url: string | null) => void;
 }
 
 export const usePlayerStore = create<PlayerState>((set, get) => ({
@@ -24,6 +26,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   isPlaying: false,
   volume: 1,
   meta: null,
+  streamUrl: null,
   show: () => set({ isVisible: true, isPlaying: true }),
   hide: () => set({ isVisible: false, isPlaying: false }),
   toggle: () => get().isVisible
@@ -32,4 +35,5 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   setPlaying: (isPlaying) => set({ isPlaying }),
   setVolume: (volume) => set({ volume }),
   setMeta: (meta) => set({ meta }),
+  playStream: (url) => set({ streamUrl: url, isVisible: true, isPlaying: true }),
 }));

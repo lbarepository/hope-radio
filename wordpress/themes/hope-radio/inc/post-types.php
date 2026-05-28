@@ -119,6 +119,26 @@ add_action('init', function () {
         'graphql_plural_name' => 'clips',
     ]);
 
+    register_post_type('radio', [
+        'labels' => [
+            'name'               => __('Nos radios', 'hope-radio'),
+            'singular_name'      => __('Radio', 'hope-radio'),
+            'add_new_item'       => __('Ajouter une radio', 'hope-radio'),
+            'edit_item'          => __('Modifier la radio', 'hope-radio'),
+            'not_found'          => __('Aucune radio trouvée', 'hope-radio'),
+            'not_found_in_trash' => __('Aucune radio dans la corbeille', 'hope-radio'),
+        ],
+        'public'              => true,
+        'has_archive'         => false,
+        'rewrite'             => ['slug' => 'radios'],
+        'supports'            => ['title', 'thumbnail'],
+        'menu_icon'           => 'dashicons-radio',
+        'show_in_rest'        => false,
+        'show_in_graphql'     => true,
+        'graphql_single_name' => 'radio',
+        'graphql_plural_name' => 'radios',
+    ]);
+
     register_taxonomy('agenda_categorie', 'agenda', [
         'labels' => [
             'name'          => __('Catégories agenda', 'hope-radio'),

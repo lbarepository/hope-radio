@@ -25,6 +25,7 @@ export default function RadioPlayer() {
   const setPlaying = usePlayerStore((s) => s.setPlaying);
   const setVolume = usePlayerStore((s) => s.setVolume);
   const setMeta = usePlayerStore((s) => s.setMeta);
+  const streamUrl = usePlayerStore((s) => s.streamUrl);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const preconnectRef = useRef<HTMLLinkElement | null>(null);
@@ -88,7 +89,7 @@ export default function RadioPlayer() {
       preconnectRef.current = null;
       // Reuse pre-warmed buffer if available, otherwise open a fresh connection.
       // Cache-busting param bypasses mobile carrier proxies that buffer infinite streams.
-      if (!audio.getAttribute('src')) audio.src = buildStreamUrl();
+      audio.src = buildStreamUrl(streamUrl);
       setIsLoading(true);
       audio.play().catch(() => { setIsLoading(false); setPlaying(false); });
     } else {
@@ -109,7 +110,7 @@ export default function RadioPlayer() {
         preconnectTimerRef.current = null;
       }, 30_000);
     }
-  }, [isPlaying, setPlaying]);
+  }, [isPlaying, setPlaying, streamUrl]);
 
   // Sync volume
   useEffect(() => {

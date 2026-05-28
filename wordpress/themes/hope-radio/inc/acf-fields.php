@@ -208,6 +208,53 @@ acf_add_local_field_group([
 ]);
 
 acf_add_local_field_group([
+    'key'                => 'group_radio',
+    'title'              => 'Informations de la radio',
+    'show_in_graphql'    => 1,
+    'graphql_field_name' => 'radioFields',
+    'fields'             => [
+        [
+            'key'                => 'field_radio_lien',
+            'label'              => 'URL du flux (direct)',
+            'name'               => 'lien',
+            'type'               => 'url',
+            'required'           => 1,
+            'instructions'       => 'URL du flux audio brut (ex : https://stream.exemple.fr/radio)',
+            'show_in_graphql'    => 1,
+            'graphql_field_name' => 'lien',
+        ],
+        [
+            'key'                => 'field_radio_proxied_url',
+            'label'              => 'URL proxifiée (générée automatiquement)',
+            'name'               => 'proxied_url',
+            'type'               => 'text',
+            'readonly'           => 1,
+            'instructions'       => 'Calculé automatiquement à l\'enregistrement. Ne pas modifier.',
+            'show_in_graphql'    => 1,
+            'graphql_field_name' => 'proxiedUrl',
+        ],
+    ],
+    'location' => [
+        [['param' => 'post_type', 'operator' => '==', 'value' => 'radio']],
+    ],
+]);
+
+add_action('save_post_radio', function (int $post_id) {
+    if (wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) {
+        return;
+    }
+    $lien = get_field('lien', $post_id);
+    if (!$lien) {
+        return;
+    }
+    $worker_base = defined('RADIO_STREAM_WORKER_URL')
+        ? rtrim(RADIO_STREAM_WORKER_URL, '/')
+        : 'https://radio-stream-proxy.hoperadiofrance.workers.dev';
+    $proxied = $worker_base . '?stream=' . rawurlencode($lien);
+    update_field('proxied_url', $proxied, $post_id);
+});
+
+acf_add_local_field_group([
     'key'                => 'group_clip',
     'title'              => 'Informations du clip',
     'show_in_graphql'    => 1,
