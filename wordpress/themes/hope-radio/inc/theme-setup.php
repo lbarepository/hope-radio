@@ -18,7 +18,8 @@ function after_setup_theme_hope_radio() {
         'secondary-menu' => __('Top menu', 'hope-radio'),
         'reseaux-sociaux' => __('Réseaux sociaux', 'hope-radio'),
         'partenaires' => __('Nos partenaires', 'hope-radio'),
-        'plus-infos' => __('Plus d\'infos', 'hope-radio'),
+        'plus-infos'    => __('Plus d\'infos', 'hope-radio'),
+        'footer-legal'  => __('Footer — liens légaux', 'hope-radio'),
     ]);
 }
 
