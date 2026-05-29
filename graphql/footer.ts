@@ -38,6 +38,10 @@ export interface GetFooterSocialMenuData {
   menus: { nodes: FooterMenu<TopMenuItem>[] };
 }
 
+export interface GetFooterLegalMenuData {
+  menus: { nodes: FooterMenu<MenuItem>[] };
+}
+
 export const GET_FOOTER_CONTACT = /* GraphQL */ `
   query GetFooterContact {
     footerData {
@@ -81,6 +85,22 @@ export const GET_PLUS_INFOS_MENU = /* GraphQL */ `
     menus(where: { location: PLUS_INFOS }) {
       nodes {
         name
+        menuItems {
+          nodes {
+            id
+            label
+            url
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_FOOTER_LEGAL_MENU = /* GraphQL */ `
+  query GetFooterLegalMenu {
+    menus(where: { location: FOOTER_LEGAL }) {
+      nodes {
         menuItems {
           nodes {
             id

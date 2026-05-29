@@ -7,20 +7,23 @@ import {
   GET_PARTENAIRES_MENU,
   GET_PLUS_INFOS_MENU,
   GET_FOOTER_SOCIAL_MENU,
+  GET_FOOTER_LEGAL_MENU,
   type GetFooterContactResponse,
   type GetFooterTitlesResponse,
   type GetPartenairesMenuData,
   type GetPlusInfosMenuData,
   type GetFooterSocialMenuData,
+  type GetFooterLegalMenuData,
 } from '@/graphql/footer';
 
 export default async function Footer() {
-  const [contactRes, titlesRes, partenairesRes, plusInfosRes, socialRes] = await Promise.all([
+  const [contactRes, titlesRes, partenairesRes, plusInfosRes, socialRes, legalRes] = await Promise.all([
     fetchGraphQL<GetFooterContactResponse>(GET_FOOTER_CONTACT).catch(() => null),
     fetchGraphQL<GetFooterTitlesResponse>(GET_FOOTER_TITLES).catch(() => null),
     fetchGraphQL<GetPartenairesMenuData>(GET_PARTENAIRES_MENU).catch(() => null),
     fetchGraphQL<GetPlusInfosMenuData>(GET_PLUS_INFOS_MENU).catch(() => null),
     fetchGraphQL<GetFooterSocialMenuData>(GET_FOOTER_SOCIAL_MENU).catch(() => null),
+    fetchGraphQL<GetFooterLegalMenuData>(GET_FOOTER_LEGAL_MENU).catch(() => null),
   ]);
 
   const footer          = contactRes?.footerData ?? null;
@@ -31,6 +34,7 @@ export default async function Footer() {
   const partenaires     = partenairesMenu?.menuItems.nodes ?? [];
   const plusInfos       = plusInfosMenu?.menuItems.nodes   ?? [];
   const sociaux         = sociauxMenu?.menuItems.nodes     ?? [];
+  const legalLinks      = legalRes?.menus.nodes[0]?.menuItems.nodes ?? [];
 
   return (
     <footer className="bg-white">
@@ -167,9 +171,25 @@ export default async function Footer() {
 
       {/* Barre copyright */}
       <div className="py-8">
-        <p className="font-button text-center text-[12px] font-normal leading-[20px] text-black">
-          {footer?.copyright ?? '© Tous droits réservés.'}
-        </p>
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+          <p className="text-[12px] font-normal leading-[20px] text-black">
+            {footer?.copyright ?? '© Tous droits réservés.'}
+          </p>
+          {legalLinks.length > 0 && (
+            <ul className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              {legalLinks.map((item) => (
+                <li key={item.id}>
+                  <Link
+                    href={normalizeMenuUrl(item.url)}
+                    className="text-[12px] font-normal leading-[20px] text-black hover:underline"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </footer>
   );
