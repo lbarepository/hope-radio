@@ -446,6 +446,57 @@ acf_add_local_field_group([
                 ],
             ],
         ],
+        [
+            'key'   => 'field_tab_footer',
+            'label' => 'Footer',
+            'type'  => 'tab',
+        ],
+        [
+            'key'           => 'field_footer_titre_colonne1',
+            'label'         => 'Titre colonne 1',
+            'name'          => 'footer_titre_colonne1',
+            'type'          => 'text',
+            'default_value' => 'Hope Radio',
+        ],
+        [
+            'key'           => 'field_footer_titre_newsletter',
+            'label'         => 'Titre newsletter',
+            'name'          => 'footer_titre_newsletter',
+            'type'          => 'text',
+            'default_value' => 'Inscription newsletter',
+        ],
+        [
+            'key'   => 'field_footer_a_propos',
+            'label' => 'À propos',
+            'name'  => 'footer_a_propos',
+            'type'  => 'textarea',
+            'rows'  => 3,
+        ],
+        [
+            'key'   => 'field_footer_adresse',
+            'label' => 'Adresse',
+            'name'  => 'footer_adresse',
+            'type'  => 'text',
+        ],
+        [
+            'key'   => 'field_footer_telephone',
+            'label' => 'Numéro de téléphone',
+            'name'  => 'footer_telephone',
+            'type'  => 'text',
+        ],
+        [
+            'key'   => 'field_footer_email',
+            'label' => 'Email',
+            'name'  => 'footer_email',
+            'type'  => 'email',
+        ],
+        [
+            'key'           => 'field_footer_copyright',
+            'label'         => 'Copyright',
+            'name'          => 'copyright',
+            'type'          => 'text',
+            'default_value' => '© Tous droits réservés. Mentions légales I Politique de confidentialité I Plan du site',
+        ],
     ],
     'location' => [
         [['param' => 'options_page', 'operator' => '==', 'value' => 'theme-options']],
@@ -617,6 +668,39 @@ add_action('graphql_register_types', function () {
                 'label'       => get_field('faq_label',       'option') ?: null,
                 'description' => get_field('faq_description', 'option') ?: null,
                 'items'       => $items,
+            ];
+        },
+    ]);
+});
+
+// Expose les données footer via WPGraphQL.
+// Le resolver lit les champs ACF footer_* et copyright depuis les options du thème.
+add_action('graphql_register_types', function () {
+    register_graphql_object_type('FooterData', [
+        'description' => 'Données du footer gérées via Options du thème',
+        'fields'      => [
+            'titreColonne1'    => ['type' => 'String'],
+            'titreNewsletter'  => ['type' => 'String'],
+            'aPropos'          => ['type' => 'String'],
+            'adresse'          => ['type' => 'String'],
+            'telephone'        => ['type' => 'String'],
+            'email'            => ['type' => 'String'],
+            'copyright'        => ['type' => 'String'],
+        ],
+    ]);
+
+    register_graphql_field('RootQuery', 'footerData', [
+        'type'        => 'FooterData',
+        'description' => 'Données footer gérées via Options du thème',
+        'resolve'     => function () {
+            return [
+                'titreColonne1'   => get_field('footer_titre_colonne1',   'option') ?: 'Hope Radio',
+                'titreNewsletter' => get_field('footer_titre_newsletter', 'option') ?: 'Inscription newsletter',
+                'aPropos'         => get_field('footer_a_propos',         'option') ?: null,
+                'adresse'         => get_field('footer_adresse',          'option') ?: null,
+                'telephone'       => get_field('footer_telephone',        'option') ?: null,
+                'email'           => get_field('footer_email',            'option') ?: null,
+                'copyright'       => get_field('copyright',               'option') ?: null,
             ];
         },
     ]);
