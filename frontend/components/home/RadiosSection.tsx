@@ -25,7 +25,7 @@ export default async function RadiosSection({ count = 20 }: RadiosSectionProps) 
   if (cards.length === 0) return null;
 
   return (
-    <section className="w-full py-12 overflow-hidden" style={{ background: '#72004A' }}>
+    <section className="w-full py-12 overflow-hidden" style={{ background: '#310C52' }}>
       <div className="container ">
         <h2
           className="text-white  font-nav font-[900] text-[48px] leading-[83%] uppercase mb-8"
