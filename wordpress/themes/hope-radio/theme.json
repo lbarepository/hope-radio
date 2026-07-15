@@ -3,6 +3,7 @@
   "version": 3,
 
   "settings": {
+    "appearanceTools": true,
 
     "color": {
       "custom": false,
@@ -24,6 +25,7 @@
     "typography": {
       "customFontSize": false,
       "defaultFontSizes": false,
+
       "fontFamilies": [
         {
           "name": "Century Gothic",
@@ -41,33 +43,67 @@
           "fontFamily": "'Copyright Radoslaw Lukasiewicz', sans-serif"
         }
       ],
+
       "fontSizes": [
         { "name": "HUGE",               "slug": "huge",               "size": "120px" },
-        { "name": "H1",                 "slug": "h1",                 "size": "88px"  },
-        { "name": "H2",                 "slug": "h2",                 "size": "88px"  },
-        { "name": "H3",                 "slug": "h3",                 "size": "64px"  },
-        { "name": "H4",                 "slug": "h4",                 "size": "48px"  },
-        { "name": "H5",                 "slug": "h5",                 "size": "28px"  },
-        { "name": "BIG",                "slug": "big",                "size": "56px"  },
-        { "name": "Sous-titre",         "slug": "sous-titre",         "size": "32px"  },
-        { "name": "Paragraphe large",   "slug": "paragraphe-large",   "size": "24px"  },
-        { "name": "Paragraphe Medium",  "slug": "paragraphe-medium",  "size": "18px"  },
-        { "name": "Paragraphe Regular", "slug": "paragraphe-regular", "size": "16px"  },
-        { "name": "Small text LABEL",   "slug": "small-label",        "size": "14px"  },
-        { "name": "X-small text label", "slug": "xsmall-label",       "size": "12px"  },
-        { "name": "X-small text TAG",   "slug": "xsmall-tag",         "size": "10px"  },
-        { "name": "Petit titre",        "slug": "petit-titre",        "size": "20px"  },
-        { "name": "Titre GRAPHIQUE",    "slug": "titre-graphique",    "size": "55px"  },
-        { "name": "Text Bouton",        "slug": "text-bouton",        "size": "16px"  },
-        { "name": "Small texte",        "slug": "small-texte",        "size": "14px"  },
-        { "name": "Text mobile",        "slug": "text-mobile",        "size": "12px"  }
+        { "name": "H1",                 "slug": "h1",                 "size": "88px" },
+        { "name": "H2",                 "slug": "h2",                 "size": "88px" },
+        { "name": "H3",                 "slug": "h3",                 "size": "64px" },
+        { "name": "H4",                 "slug": "h4",                 "size": "48px" },
+        { "name": "H5",                 "slug": "h5",                 "size": "28px" },
+        { "name": "BIG",                "slug": "big",                "size": "56px" },
+        { "name": "Sous-titre",         "slug": "sous-titre",         "size": "32px" },
+        { "name": "Paragraphe large",   "slug": "paragraphe-large",   "size": "24px" },
+        { "name": "Paragraphe Medium",  "slug": "paragraphe-medium",  "size": "18px" },
+        { "name": "Paragraphe Regular", "slug": "paragraphe-regular", "size": "16px" },
+        { "name": "Small text LABEL",   "slug": "small-label",        "size": "14px" },
+        { "name": "X-small text label", "slug": "xsmall-label",       "size": "12px" },
+        { "name": "X-small text TAG",   "slug": "xsmall-tag",         "size": "10px" },
+        { "name": "Petit titre",        "slug": "petit-titre",        "size": "20px" },
+        { "name": "Titre GRAPHIQUE",    "slug": "titre-graphique",    "size": "55px" },
+        { "name": "Text Bouton",        "slug": "text-bouton",        "size": "16px" },
+        { "name": "Small texte",        "slug": "small-texte",        "size": "14px" },
+        { "name": "Text mobile",        "slug": "text-mobile",        "size": "12px" }
       ]
     },
 
     "spacing": {
-      "customSpacingSize": false,
+      "margin": true,
+      "padding": true,
+      "blockGap": true,
+
+      "customSpacingSize": true,
       "defaultSpacingSizes": false,
-      "units": ["px", "rem", "%"]
+
+      "units": ["px", "rem", "%"],
+
+      "spacingSizes": [
+        {
+          "name": "XS",
+          "slug": "xs",
+          "size": "8px"
+        },
+        {
+          "name": "S",
+          "slug": "s",
+          "size": "16px"
+        },
+        {
+          "name": "M",
+          "slug": "m",
+          "size": "32px"
+        },
+        {
+          "name": "L",
+          "slug": "l",
+          "size": "64px"
+        },
+        {
+          "name": "XL",
+          "slug": "xl",
+          "size": "96px"
+        }
+      ]
     },
 
     "border": {
@@ -99,7 +135,6 @@
   },
 
   "styles": {
-
     "color": {
       "background": "#FFFFFF",
       "text": "#212320"
@@ -120,6 +155,7 @@
           "lineHeight": "0.9"
         }
       },
+
       "h2": {
         "typography": {
           "fontFamily": "var(--wp--preset--font-family--gravesend-sans)",
@@ -128,6 +164,7 @@
           "lineHeight": "0.9"
         }
       },
+
       "h3": {
         "typography": {
           "fontFamily": "var(--wp--preset--font-family--gravesend-sans)",
@@ -136,6 +173,7 @@
           "lineHeight": "0.9"
         }
       },
+
       "h4": {
         "typography": {
           "fontFamily": "var(--wp--preset--font-family--gravesend-sans)",
@@ -144,6 +182,7 @@
           "lineHeight": "0.83"
         }
       },
+
       "h5": {
         "typography": {
           "fontFamily": "var(--wp--preset--font-family--gravesend-sans)",
@@ -152,17 +191,20 @@
           "lineHeight": "1.1"
         }
       },
+
       "button": {
         "color": {
           "background": "var(--wp--preset--color--violet-principal)",
           "text": "var(--wp--preset--color--blanc)"
         },
+
         "typography": {
           "fontFamily": "var(--wp--preset--font-family--century-gothic)",
           "fontSize": "var(--wp--preset--font-size--text-bouton)",
           "fontWeight": "600",
           "lineHeight": "normal"
         },
+
         "spacing": {
           "padding": {
             "top": "10px",
@@ -171,10 +213,12 @@
             "right": "30px"
           }
         },
+
         "border": {
           "radius": "9999px"
         }
       },
+
       "link": {
         "color": {
           "text": "var(--wp--preset--color--violet-principal)"
@@ -187,6 +231,7 @@
         "color": {
           "text": "var(--wp--preset--color--violet-principal)"
         },
+
         "border": {
           "color": "var(--wp--preset--color--violet-principal)",
           "width": "1px"

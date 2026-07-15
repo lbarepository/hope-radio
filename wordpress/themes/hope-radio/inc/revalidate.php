@@ -19,6 +19,10 @@ add_action('transition_post_status', function (string $new_status, string $old_s
             'Content-Type'        => 'application/json',
             'x-revalidate-secret' => $revalidate_key,
         ],
-        'body' => wp_json_encode(['postType' => $post->post_type]),
+        'body' => wp_json_encode([
+            'postType' => $post->post_type,
+            'slug'     => $post->post_name,
+            'uri'      => wp_make_link_relative(get_permalink($post)),
+        ]),
     ]);
 }, 10, 3);

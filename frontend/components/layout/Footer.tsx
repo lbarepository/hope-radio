@@ -171,23 +171,29 @@ export default async function Footer() {
 
       {/* Barre copyright */}
       <div className="py-8">
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+        <div className="flex flex-wrap items-center justify-center gap-y-2">
           <p className="text-[12px] font-normal leading-[20px] text-black">
             {footer?.copyright ?? '© Tous droits réservés.'}
           </p>
           {legalLinks.length > 0 && (
-            <ul className="flex flex-wrap items-center gap-x-4 gap-y-1">
-              {legalLinks.map((item) => (
-                <li key={item.id}>
-                  <Link
-                    href={normalizeMenuUrl(item.url)}
-                    className="text-[12px] font-normal leading-[20px] text-black hover:underline"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <>
+              <span className="text-[12px] text-black select-none">|</span>
+              <ul className="flex flex-wrap items-center gap-y-1">
+                {legalLinks.map((item, index) => (
+                  <li key={item.id} className="flex items-center">
+                    {index > 0 && (
+                      <span className="text-[12px] text-black select-none">|</span>
+                    )}
+                    <Link
+                      href={normalizeMenuUrl(item.url)}
+                      className="text-[12px] font-normal leading-[20px] text-black hover:underline"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
         </div>
       </div>

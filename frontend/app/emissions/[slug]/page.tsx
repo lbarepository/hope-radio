@@ -61,12 +61,12 @@ export default async function EmissionPage({ params }: Props) {
     fetchGraphQL<GetEmissionBySlugData>(
       GET_EMISSION_BY_SLUG,
       { slug },
-      { next: { revalidate: 3600 } },
+      { next: { revalidate: 60 } },
     ),
     fetchGraphQL<GetGrilleSlotsData>(
       GET_GRILLE_SLOTS,
       { dateDebut, dateFin },
-      { next: { revalidate: 3600 } },
+      { next: { revalidate: 60 } },
     ),
   ]);
 

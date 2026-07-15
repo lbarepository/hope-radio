@@ -8,7 +8,7 @@ const BanniereSlider = dynamic(() => import('./BanniereSlider'));
 export default async function BanniereSection() {
   let data: GetBannièresData;
   try {
-    data = await fetchGraphQL<GetBannièresData>(GET_BANNIERES, {}, { next: { revalidate: 3600 } });
+    data = await fetchGraphQL<GetBannièresData>(GET_BANNIERES, {}, { next: { revalidate: 60 } });
   } catch {
     return null;
   }

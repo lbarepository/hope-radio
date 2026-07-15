@@ -54,7 +54,7 @@
 }
 
 @font-face {
-  font-family: 'Copyright Radosaw ukasiewicz, radluka.com';
+  font-family: 'Copyright Radoslaw Lukasiewicz';
   src: url('/fonts/Copyright-Radosaw-ukasiewicz-radlukacom.woff2') format('woff2'),
     url('/fonts/Copyright-Radosaw-ukasiewicz-radlukacom.woff') format('woff');
   font-weight: 900;
@@ -65,7 +65,7 @@
 @theme inline {
   --font-body: 'Century Gothic', sans-serif;
   --font-heading: 'Gravesend Sans', sans-serif;
-  --font-nav: 'Copyright Radosaw ukasiewicz, radluka.com', serif;
+  --font-nav: 'Copyright Radoslaw Lukasiewicz', serif;
   --font-button:  var(--font-archivo);
   --font-poppins: var(--next-font-poppins);
 
@@ -90,6 +90,53 @@
 
 body {
   font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+/* ── WordPress preset variables — mappés depuis theme.json ───────────────── */
+/* Permettent aux classes Gutenberg (.has-*-color, .has-*-font-family, etc.) */
+/* de fonctionner sans dupliquer les styles dans WordPress.                   */
+
+:root {
+  /* Couleurs */
+  --wp--preset--color--orange-principal:  #E45612;
+  --wp--preset--color--violet-principal:  #720049;
+  --wp--preset--color--jaune-secondaire:  #EEBB72;
+  --wp--preset--color--violet-secondaire: #320C52;
+  --wp--preset--color--rouge-secondaire:  #320C52;
+  --wp--preset--color--rose-secondaire:   #B929D8;
+  --wp--preset--color--blanc:             #FFFFFF;
+  --wp--preset--color--noir:              #212320;
+
+  /* Familles typographiques */
+  --wp--preset--font-family--century-gothic: 'Century Gothic', 'AppleGothic', 'Trebuchet MS', sans-serif;
+  --wp--preset--font-family--gravesend-sans: 'Gravesend Sans', sans-serif;
+  --wp--preset--font-family--radluka:        'Copyright Radoslaw Lukasiewicz', sans-serif;
+
+  /* Layout Gutenberg — content size / wide size */
+  --wp--style--global--content-size: 720px;
+  --wp--style--global--wide-size:    1139px;
+
+  /* Tailles de police */
+  --wp--preset--font-size--huge:              120px;
+  --wp--preset--font-size--h1:                 88px;
+  --wp--preset--font-size--h2:                 88px;
+  --wp--preset--font-size--h3:                 64px;
+  --wp--preset--font-size--h4:                 48px;
+  --wp--preset--font-size--h5:                 28px;
+  --wp--preset--font-size--big:                56px;
+  --wp--preset--font-size--sous-titre:         32px;
+  --wp--preset--font-size--paragraphe-large:   24px;
+  --wp--preset--font-size--paragraphe-medium:  18px;
+  --wp--preset--font-size--paragraphe-regular: 16px;
+  --wp--preset--font-size--small-label:        14px;
+  --wp--preset--font-size--xsmall-label:       12px;
+  --wp--preset--font-size--xsmall-tag:         10px;
+  --wp--preset--font-size--petit-titre:        20px;
+  --wp--preset--font-size--titre-graphique:    55px;
+  --wp--preset--font-size--text-bouton:        16px;
+  --wp--preset--font-size--small-texte:        14px;
+  --wp--preset--font-size--text-mobile:        12px;
 }
 
 .container {
@@ -109,6 +156,19 @@ body {
   line-height: 1.6;
 }
 
+/* Variante fond clair (pages WordPress sur bg-white) */
+/* Double classe pour battre .article-content sans !important */
+/* Les has-*-color !important Gutenberg passent toujours au-dessus */
+.article-content.article-content--light {
+  color: #212320;
+}
+.article-content.article-content--light h2,
+.article-content.article-content--light h3,
+.article-content.article-content--light h4,
+.article-content.article-content--light .wp-block-heading {
+  color: #212320;
+}
+
 .article-content p {
   margin: 0 0 1em;
 }
@@ -119,11 +179,12 @@ body {
 
 .article-content h2,
 .article-content h3,
-.article-content h4 {
-  font-family: 'Gravesend Sans', sans-serif;
+.article-content h4,
+.article-content .wp-block-heading {
+  font-family: 'Copyright Radoslaw Lukasiewicz', serif;
   font-weight: 700;
   color: #ffffff;
-  margin: 1.5em 0 0.5em;
+  margin: 0 1.5em 1.5em 0;
   line-height: 1.2;
 }
 
@@ -159,6 +220,174 @@ body {
   opacity: 0.85;
 }
 
+/* ── Gutenberg embeds — aspect ratio sans .wp-embed-responsive parent ────── */
+
+.article-content .wp-has-aspect-ratio .wp-block-embed__wrapper {
+  position: relative;
+  overflow: hidden;
+}
+.article-content .wp-has-aspect-ratio .wp-block-embed__wrapper::before {
+  content: "";
+  display: block;
+}
+.article-content .wp-embed-aspect-21-9 .wp-block-embed__wrapper::before { padding-top: 42.86%;  }
+.article-content .wp-embed-aspect-18-9 .wp-block-embed__wrapper::before { padding-top: 50%;     }
+.article-content .wp-embed-aspect-16-9 .wp-block-embed__wrapper::before { padding-top: 56.25%;  }
+.article-content .wp-embed-aspect-4-3  .wp-block-embed__wrapper::before { padding-top: 75%;     }
+.article-content .wp-embed-aspect-1-1  .wp-block-embed__wrapper::before { padding-top: 100%;    }
+.article-content .wp-embed-aspect-9-16 .wp-block-embed__wrapper::before { padding-top: 177.78%; }
+.article-content .wp-embed-aspect-1-2  .wp-block-embed__wrapper::before { padding-top: 200%;    }
+
+.article-content .wp-has-aspect-ratio iframe {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── wp-elements-* fallback ───────────────────────────────────────────────── */
+/* WordPress injecte du CSS inline pour chaque bloc avec has-link-color.       */
+/* En headless, ce CSS (wp-elements-{hash}) est absent — les liens héritent    */
+/* la couleur du texte du bloc, ce qui est le comportement le plus cohérent.   */
+.has-link-color a:not(.wp-element-button) {
+  color: inherit;
+}
+
+/* ── Gutenberg layout classes — générées dynamiquement par WordPress ─────── */
+/* is-layout-constrained : bloque le contenu à content-size, wide sort plus loin */
+:root :where(.is-layout-constrained) > :not(.alignleft):not(.alignright):not(.alignfull) {
+  max-width: var(--wp--style--global--content-size);
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+:root :where(.is-layout-constrained) > .alignwide {
+  max-width: var(--wp--style--global--wide-size);
+}
+:root :where(.is-layout-constrained) > .alignfull {
+  max-width: none;
+}
+
+/* is-layout-flow : espacement vertical par défaut entre enfants */
+:root :where(.is-layout-flow) > * {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+:root :where(.is-layout-flow) > * + * {
+  margin-block-start: var(--wp--style--block-gap, 1.5em);
+}
+
+/* is-layout-flex */
+:root :where(.is-layout-flex) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wp--style--block-gap, 0.5em);
+}
+
+/* is-layout-grid */
+:root :where(.is-layout-grid) {
+  display: grid;
+  gap: var(--wp--style--block-gap, 0.5em);
+}
+
+/* Padding quand has-background est sur un bloc individuel (column, group…) */
+:root :where(.has-background) {
+  padding: 1.25em 2.375em;
+}
+
+/* ── Gutenberg preset color classes — générées dynamiquement par WordPress ── */
+/* background-color */
+.has-orange-principal-background-color  { background-color: var(--wp--preset--color--orange-principal)  !important; }
+.has-violet-principal-background-color  { background-color: var(--wp--preset--color--violet-principal)  !important; }
+.has-jaune-secondaire-background-color  { background-color: var(--wp--preset--color--jaune-secondaire)  !important; }
+.has-violet-secondaire-background-color { background-color: var(--wp--preset--color--violet-secondaire) !important; }
+.has-rouge-secondaire-background-color  { background-color: var(--wp--preset--color--rouge-secondaire)  !important; }
+.has-rose-secondaire-background-color   { background-color: var(--wp--preset--color--rose-secondaire)   !important; }
+.has-blanc-background-color             { background-color: var(--wp--preset--color--blanc)             !important; }
+.has-noir-background-color              { background-color: var(--wp--preset--color--noir)              !important; }
+
+/* color */
+.has-orange-principal-color  { color: var(--wp--preset--color--orange-principal)  !important; }
+.has-violet-principal-color  { color: var(--wp--preset--color--violet-principal)  !important; }
+.has-jaune-secondaire-color  { color: var(--wp--preset--color--jaune-secondaire)  !important; }
+.has-violet-secondaire-color { color: var(--wp--preset--color--violet-secondaire) !important; }
+.has-rouge-secondaire-color  { color: var(--wp--preset--color--rouge-secondaire)  !important; }
+.has-rose-secondaire-color   { color: var(--wp--preset--color--rose-secondaire)   !important; }
+.has-blanc-color             { color: var(--wp--preset--color--blanc)             !important; }
+.has-noir-color              { color: var(--wp--preset--color--noir)              !important; }
+
+/* font-size */
+.has-huge-font-size              { font-size: var(--wp--preset--font-size--huge)              !important; }
+.has-h1-font-size                { font-size: var(--wp--preset--font-size--h1)                !important; }
+.has-h2-font-size                { font-size: var(--wp--preset--font-size--h2)                !important; }
+.has-h3-font-size                { font-size: var(--wp--preset--font-size--h3)                !important; }
+.has-h4-font-size                { font-size: var(--wp--preset--font-size--h4)                !important; }
+.has-h5-font-size                { font-size: var(--wp--preset--font-size--h5)                !important; }
+.has-big-font-size               { font-size: var(--wp--preset--font-size--big)               !important; }
+.has-sous-titre-font-size        { font-size: var(--wp--preset--font-size--sous-titre)        !important; }
+.has-paragraphe-large-font-size  { font-size: var(--wp--preset--font-size--paragraphe-large)  !important; }
+.has-paragraphe-medium-font-size { font-size: var(--wp--preset--font-size--paragraphe-medium) !important; }
+.has-paragraphe-regular-font-size{ font-size: var(--wp--preset--font-size--paragraphe-regular)!important; }
+.has-small-label-font-size       { font-size: var(--wp--preset--font-size--small-label)       !important; }
+.has-xsmall-label-font-size      { font-size: var(--wp--preset--font-size--xsmall-label)      !important; }
+.has-xsmall-tag-font-size        { font-size: var(--wp--preset--font-size--xsmall-tag)        !important; }
+.has-petit-titre-font-size       { font-size: var(--wp--preset--font-size--petit-titre)       !important; }
+.has-titre-graphique-font-size   { font-size: var(--wp--preset--font-size--titre-graphique)   !important; }
+.has-text-bouton-font-size       { font-size: var(--wp--preset--font-size--text-bouton)       !important; }
+.has-small-texte-font-size       { font-size: var(--wp--preset--font-size--small-texte)       !important; }
+.has-text-mobile-font-size       { font-size: var(--wp--preset--font-size--text-mobile)       !important; }
+
+/* font-family */
+.has-century-gothic-font-family { font-family: var(--wp--preset--font-family--century-gothic) !important; }
+.has-gravesend-sans-font-family { font-family: var(--wp--preset--font-family--gravesend-sans) !important; }
+.has-radluka-font-family        { font-family: var(--wp--preset--font-family--radluka)        !important; }
+
+/* ── Gutenberg alignments ─────────────────────────────────────────────────── */
+/* WordPress génère ces règles dynamiquement depuis theme.json — inexistantes  */
+/* en headless, donc déclarées ici manuellement.                               */
+
+.article-content .aligncenter {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+/* figure / image — fit-content pour que margin:auto puisse centrer */
+.article-content figure.aligncenter,
+.article-content .wp-block-image.aligncenter {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.article-content .alignleft {
+  float: left;
+  margin-right: 2em;
+  margin-bottom: 1em;
+}
+
+.article-content .alignright {
+  float: right;
+  margin-left: 2em;
+  margin-bottom: 1em;
+}
+
+/* alignwide / alignfull — breakout hors du max-w-[720px] du conteneur */
+.article-content .alignwide,
+.article-content .alignfull {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.article-content .alignwide {
+  width: min(var(--wp--style--global--wide-size), 100vw);
+}
+
+.article-content .alignfull {
+  width: 100vw;
+  max-width: 100vw;
+}
+
 /* ── HeroSlider — Swiper overrides + responsive ─────────────────────────── */
 
 .hero-slider .swiper-pagination {
@@ -191,3 +420,6 @@ body {
   transition: width 0.4s ease;
 }
 
+.article-content {
+  @apply w-full max-w-full mx-auto;
+}

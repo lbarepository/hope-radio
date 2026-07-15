@@ -1,6 +1,6 @@
 <?php
 
-add_filter('allowed_block_types_all', function ($allowed_blocks, $editor_context) {
+/* add_filter('allowed_block_types_all', function ($allowed_blocks, $editor_context) {
     return [
         'core/paragraph',
         'core/heading',
@@ -12,8 +12,10 @@ add_filter('allowed_block_types_all', function ($allowed_blocks, $editor_context
         'core/separator',
         'core/columns',
         'core/group',
+        'core/spacer',
+        'core/button'
     ];
-}, 10, 2);
+}, 10, 2);*/
 
 /**
  * Désactive l'éditeur de blocs sur les CPTs administrés exclusivement via ACF.

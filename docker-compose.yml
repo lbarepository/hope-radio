@@ -90,10 +90,11 @@ services:
     depends_on:
       - wordpress
     environment:
-      # URL WordPress vue depuis le réseau Docker interne
-      NEXT_PUBLIC_WORDPRESS_URL: http://wordpress
-      WORDPRESS_API_URL: http://wordpress/graphql
-      # URL publique pour le browser (hors Docker)
+      # URL WordPress — commenter/décommenter selon l'environnement cible
+      # Local Docker :
+      # NEXT_PUBLIC_WORDPRESS_URL: http://wordpress
+      # WORDPRESS_API_URL: http://wordpress/graphql
+      # Remote (lit .env.local si ces lignes sont commentées) :
       NEXT_PUBLIC_WORDPRESS_PUBLIC_URL: http://localhost:8080
       # Faust.js
       FAUST_SECRET_KEY: dev-secret-key-change-in-prod
