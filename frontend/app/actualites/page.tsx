@@ -4,18 +4,19 @@ import type { GetActualiteCategoriesData, GetActualiteArchiveData } from '@/grap
 import { transformActualitesArchive }                              from '@/app/data/actualites/transformer';
 import { loadMoreActualites }                                      from './actions';
 import ActualitesClient                                            from '@/components/actualites/ActualitesClient';
+import { wpTags }                                                  from '@/lib/revalidateTags';
 
 export default async function ActualitesPage() {
   const [categoriesResult, postsResult] = await Promise.allSettled([
     fetchGraphQL<GetActualiteCategoriesData>(
       GET_ACTUALITE_CATEGORIES,
       {},
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: [wpTags.actualites] } },
     ),
     fetchGraphQL<GetActualiteArchiveData>(
       GET_ACTUALITES_ARCHIVE,
       { first: 6, after: null, categoryName: null },
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: [wpTags.actualites] } },
     ),
   ]);
 

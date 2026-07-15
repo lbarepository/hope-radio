@@ -6,6 +6,7 @@ import type { EmissionSlot }              from '@/app/data';
 import { GET_GRILLE_SLOTS }               from '@/graphql/grille';
 import type { GetGrilleSlotsData }        from '@/graphql/grille';
 import DecouvrirSlider                               from './DecouvrirSlider';
+import { wpTags }                                     from '@/lib/revalidateTags';
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -26,7 +27,7 @@ export default async function DecouvrirSection({
     const data = await fetchGraphQL<GetGrilleSlotsData>(
       GET_GRILLE_SLOTS,
       { dateDebut: today, dateFin: today },
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: [wpTags.grille] } },
     );
     slots = transformGrilleSlots(data);
   } catch {

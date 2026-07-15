@@ -1,19 +1,38 @@
-import { revalidatePath }         from 'next/cache';
-import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath, revalidateTag } from 'next/cache';
+import { NextRequest, NextResponse }     from 'next/server';
+import { wpTags }                        from '@/lib/revalidateTags';
 
 const ARCHIVE_PATHS_BY_POST_TYPE: Record<string, string[]> = {
-  emission:    ['/emissions', '/grille', '/'],
-  post:        ['/actualites', '/'],
-  agenda:      ['/agenda', '/'],
-  podcast:     ['/podcast', '/'],
-  animateur:   ['/emissions'],
-  page:        ['/'],
+  emission:      ['/emissions', '/grille', '/'],
+  post:          ['/actualites', '/'],
+  agenda:        ['/agenda', '/'],
+  podcast:       ['/podcast', '/'],
+  animateur:     ['/emissions'],
+  nav_menu_item: ['/'],
+  page:          ['/'],
 };
 
 const DETAIL_PATH_BY_POST_TYPE: Record<string, (slug: string) => string> = {
   emission: (slug) => `/emissions/${slug}`,
   post:     (slug) => `/actualite/${slug}`,
   agenda:   (slug) => `/agenda/${slug}`,
+};
+
+const ARCHIVE_TAGS_BY_POST_TYPE: Record<string, string[]> = {
+  emission:      [wpTags.emissions, wpTags.grille],
+  post:          [wpTags.actualites],
+  agenda:        [wpTags.agendaList],
+  podcast:       [wpTags.podcasts],
+  animateur:     [wpTags.emissions],
+  clip:          [wpTags.clips],
+  radio:         [wpTags.radios],
+  nav_menu_item: [wpTags.menus],
+};
+
+const DETAIL_TAG_BY_POST_TYPE: Record<string, (slug: string) => string> = {
+  emission: wpTags.emission,
+  post:     wpTags.actualite,
+  agenda:   wpTags.agendaItem,
 };
 
 export async function POST(request: NextRequest) {
@@ -36,14 +55,18 @@ export async function POST(request: NextRequest) {
   }
 
   const paths = new Set(ARCHIVE_PATHS_BY_POST_TYPE[postType] ?? ['/']);
-
   const detailPath = slug ? DETAIL_PATH_BY_POST_TYPE[postType]?.(slug) : undefined;
   if (detailPath) paths.add(detailPath);
   if (postType === 'page' && uri) paths.add(uri);
+  for (const path of paths) revalidatePath(path);
 
-  for (const path of paths) {
-    revalidatePath(path);
-  }
+  // revalidatePath ne force pas les fetch() encore "frais" (next.revalidate) à se
+  // relancer : seul revalidateTag purge immédiatement le Data Cache correspondant.
+  const tags = new Set(ARCHIVE_TAGS_BY_POST_TYPE[postType] ?? []);
+  const detailTag = slug ? DETAIL_TAG_BY_POST_TYPE[postType]?.(slug) : undefined;
+  if (detailTag) tags.add(detailTag);
+  if (postType === 'page' && uri) tags.add(wpTags.page(uri));
+  for (const tag of tags) revalidateTag(tag, 'max');
 
-  return NextResponse.json({ revalidated: true, paths: [...paths] });
+  return NextResponse.json({ revalidated: true, paths: [...paths], tags: [...tags] });
 }

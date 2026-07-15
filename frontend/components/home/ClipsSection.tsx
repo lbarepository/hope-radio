@@ -4,6 +4,7 @@ import type { ClipCard }      from '@/app/data';
 import { GET_CLIPS }          from '@/graphql/clips';
 import type { GetClipsData }  from '@/graphql/clips';
 import ClipsSlider            from './ClipsSlider';
+import { wpTags }             from '@/lib/revalidateTags';
 
 interface ClipsSectionProps {
   count?: number;
@@ -19,7 +20,7 @@ export default async function ClipsSection({
     const data = await fetchGraphQL<GetClipsData>(
       GET_CLIPS,
       { first: count },
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: [wpTags.clips] } },
     );
     cards = transformClips(data);
   } catch {

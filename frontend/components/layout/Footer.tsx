@@ -15,15 +15,16 @@ import {
   type GetFooterSocialMenuData,
   type GetFooterLegalMenuData,
 } from '@/graphql/footer';
+import { wpTags } from '@/lib/revalidateTags';
 
 export default async function Footer() {
   const [contactRes, titlesRes, partenairesRes, plusInfosRes, socialRes, legalRes] = await Promise.all([
-    fetchGraphQL<GetFooterContactResponse>(GET_FOOTER_CONTACT).catch(() => null),
-    fetchGraphQL<GetFooterTitlesResponse>(GET_FOOTER_TITLES).catch(() => null),
-    fetchGraphQL<GetPartenairesMenuData>(GET_PARTENAIRES_MENU).catch(() => null),
-    fetchGraphQL<GetPlusInfosMenuData>(GET_PLUS_INFOS_MENU).catch(() => null),
-    fetchGraphQL<GetFooterSocialMenuData>(GET_FOOTER_SOCIAL_MENU).catch(() => null),
-    fetchGraphQL<GetFooterLegalMenuData>(GET_FOOTER_LEGAL_MENU).catch(() => null),
+    fetchGraphQL<GetFooterContactResponse>(GET_FOOTER_CONTACT, undefined, { next: { tags: [wpTags.menus] } }).catch(() => null),
+    fetchGraphQL<GetFooterTitlesResponse>(GET_FOOTER_TITLES, undefined, { next: { tags: [wpTags.menus] } }).catch(() => null),
+    fetchGraphQL<GetPartenairesMenuData>(GET_PARTENAIRES_MENU, undefined, { next: { tags: [wpTags.menus] } }).catch(() => null),
+    fetchGraphQL<GetPlusInfosMenuData>(GET_PLUS_INFOS_MENU, undefined, { next: { tags: [wpTags.menus] } }).catch(() => null),
+    fetchGraphQL<GetFooterSocialMenuData>(GET_FOOTER_SOCIAL_MENU, undefined, { next: { tags: [wpTags.menus] } }).catch(() => null),
+    fetchGraphQL<GetFooterLegalMenuData>(GET_FOOTER_LEGAL_MENU, undefined, { next: { tags: [wpTags.menus] } }).catch(() => null),
   ]);
 
   const footer          = contactRes?.footerData ?? null;
