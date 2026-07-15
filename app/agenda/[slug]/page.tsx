@@ -6,6 +6,7 @@ import { GET_AGENDA_ITEM_BY_SLUG }  from '@/graphql/agenda';
 import type { GetAgendaItemBySlugData } from '@/graphql/agenda';
 import { transformAgendaDetail }    from '@/app/data/agenda/transformer';
 import ArticleDetail                from '@/components/actualites/ArticleDetail';
+import { wpTags }                   from '@/lib/revalidateTags';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -17,6 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const data = await fetchGraphQL<GetAgendaItemBySlugData>(
       GET_AGENDA_ITEM_BY_SLUG,
       { slug },
+      { next: { tags: [wpTags.agendaItem(slug)] } },
     );
     return { title: data.agendaItem?.title ?? 'Agenda' };
   } catch {
@@ -32,7 +34,7 @@ export default async function AgendaItemPage({ params }: Props) {
     data = await fetchGraphQL<GetAgendaItemBySlugData>(
       GET_AGENDA_ITEM_BY_SLUG,
       { slug },
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: [wpTags.agendaItem(slug)] } },
     );
   } catch {
     notFound();

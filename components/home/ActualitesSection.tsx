@@ -6,6 +6,7 @@ import type { ActualiteCard }      from '@/app/data';
 import { GET_ACTUALITES }                       from '@/graphql/actualites';
 import type { GetActualitesData }               from '@/graphql/actualites';
 import ActualitesSlider                         from './ActualitesSlider';
+import { wpTags }                               from '@/lib/revalidateTags';
 
 // ─── Card desktop ─────────────────────────────────────────────────────────────
 
@@ -68,7 +69,7 @@ export default async function ActualitesSection({
     const data = await fetchGraphQL<GetActualitesData>(
       GET_ACTUALITES,
       { first: count },
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: [wpTags.actualites] } },
     );
     cards = transformActualites(data).slice(0, count);
   } catch {

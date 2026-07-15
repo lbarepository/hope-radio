@@ -99,11 +99,13 @@ export async function fetchGraphQL<T>(
 
   // next.revalidate et cache: 'no-store' sont incompatibles dans Next.js.
   // On n'applique le revalidate par défaut que si le caller ne spécifie pas cache.
-  const defaultCache: RequestInit = fetchOptions?.cache
-    ? {}
-    : { next: { revalidate: 60 } };
+  // Fusion manuelle de `next` (et non un simple spread) : un spread aurait écrasé
+  // entièrement `next.revalidate` dès qu'un appelant fournit `next.tags`, et inversement.
+  const { cache, next, ...restOptions } = fetchOptions ?? {};
 
-  const options: RequestInit = { ...defaultCache, ...fetchOptions };
+  const options: RequestInit = cache
+    ? { cache, next, ...restOptions }
+    : { next: { revalidate: 60, ...next }, ...restOptions };
 
   let lastError: unknown;
   for (let attempt = 0; attempt <= GRAPHQL_RETRIES; attempt++) {

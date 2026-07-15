@@ -1,0 +1,15 @@
+export const wpTags = {
+  emissions:    'wp:emissions',
+  emission:     (slug: string) => `wp:emission:${slug}`,
+  grille:       'wp:grille',
+  agendaList:   'wp:agenda',
+  agendaItem:   (slug: string) => `wp:agenda:${slug}`,
+  actualites:   'wp:actualites',
+  actualite:    (slug: string) => `wp:actualite:${slug}`,
+  podcasts:     'wp:podcasts',
+  clips:        'wp:clips',
+  radios:       'wp:radios',
+  bannieres:    'wp:bannieres',
+  page:         (uri: string) => `wp:page:${uri}`,
+  menus:        'wp:menus',
+} as const;

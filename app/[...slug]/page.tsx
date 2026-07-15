@@ -1,7 +1,8 @@
 import { notFound }      from 'next/navigation';
 import type { Metadata } from 'next';
 
-import { fetchGraphQL } from '@/lib/wordpress';
+import { fetchGraphQL }  from '@/lib/wordpress';
+import { wpTags }        from '@/lib/revalidateTags';
 
 interface WpPage {
   title:   string;
@@ -29,7 +30,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const uri = '/' + slug.join('/');
   try {
-    const data = await fetchGraphQL<GetPageByUriData>(GET_PAGE_BY_URI, { uri });
+    const data = await fetchGraphQL<GetPageByUriData>(
+      GET_PAGE_BY_URI,
+      { uri },
+      { next: { tags: [wpTags.page(uri)] } },
+    );
     return { title: data.pageBy?.title ?? 'Hope Radio' };
   } catch {
     return { title: 'Hope Radio' };
@@ -42,7 +47,11 @@ export default async function WpPage({ params }: Props) {
 
   let page: WpPage | null = null;
   try {
-    const data = await fetchGraphQL<GetPageByUriData>(GET_PAGE_BY_URI, { uri });
+    const data = await fetchGraphQL<GetPageByUriData>(
+      GET_PAGE_BY_URI,
+      { uri },
+      { next: { tags: [wpTags.page(uri)] } },
+    );
     page = data.pageBy;
   } catch {
     // WP indisponible

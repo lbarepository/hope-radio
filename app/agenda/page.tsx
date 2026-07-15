@@ -4,18 +4,19 @@ import type { GetAgendaCategoriesData, GetAgendaItemsData } from '@/graphql/agen
 import { transformAgendaItems }                             from '@/app/data/agenda/transformer';
 import { loadAgendaByCategory }                             from './actions';
 import AgendaSlider                                         from '@/components/agenda/AgendaSlider';
+import { wpTags }                                           from '@/lib/revalidateTags';
 
 export default async function AgendaPage() {
   const [categoriesResult, itemsResult] = await Promise.allSettled([
     fetchGraphQL<GetAgendaCategoriesData>(
       GET_AGENDA_CATEGORIES,
       {},
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: [wpTags.agendaList] } },
     ),
     fetchGraphQL<GetAgendaItemsData>(
       GET_AGENDA_ITEMS,
       { first: 100 },
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: [wpTags.agendaList] } },
     ),
   ]);
 

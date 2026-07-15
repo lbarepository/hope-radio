@@ -8,6 +8,7 @@ import { GET_GRILLE_SLOTS }                                   from '@/graphql/gr
 import type { GetGrilleSlotsData }                            from '@/graphql/grille';
 import { transformEmissionDetail }                            from '@/app/data/emissions/transformer';
 import EmissionDetail                                         from '@/components/emissions/EmissionDetail';
+import { wpTags }                                             from '@/lib/revalidateTags';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -46,6 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const data = await fetchGraphQL<GetEmissionBySlugData>(
       GET_EMISSION_BY_SLUG,
       { slug },
+      { next: { tags: [wpTags.emission(slug)] } },
     );
     return { title: data.emission?.title ?? 'Émission' };
   } catch {
@@ -61,12 +63,12 @@ export default async function EmissionPage({ params }: Props) {
     fetchGraphQL<GetEmissionBySlugData>(
       GET_EMISSION_BY_SLUG,
       { slug },
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: [wpTags.emission(slug)] } },
     ),
     fetchGraphQL<GetGrilleSlotsData>(
       GET_GRILLE_SLOTS,
       { dateDebut, dateFin },
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: [wpTags.grille] } },
     ),
   ]);
 

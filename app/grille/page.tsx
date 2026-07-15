@@ -3,6 +3,7 @@ import { GET_GRILLE_SLOTS }                          from '@/graphql/grille';
 import type { GetGrilleSlotsData }                   from '@/graphql/grille';
 import { transformGrilleSlots } from '@/app/data';
 import GrilleClient                                  from '@/components/grille/GrilleClient';
+import { wpTags }                                    from '@/lib/revalidateTags';
 
 function getMondayOfCurrentWeek(): Date {
   const now  = new Date();
@@ -30,7 +31,7 @@ export default async function GrillePage() {
     const data = await fetchGraphQL<GetGrilleSlotsData>(
       GET_GRILLE_SLOTS,
       { dateDebut: weekDates[0], dateFin: weekDates[6] },
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: [wpTags.grille] } },
     );
     slots = transformGrilleSlots(data);
   } catch {

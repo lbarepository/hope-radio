@@ -4,18 +4,19 @@ import type { GetEmissionCategoriesData, GetEmissionsData }       from '@/graphq
 import { transformEmissions }                                     from '@/app/data/emissions/transformer';
 import { loadMoreEmissions }                                      from './actions';
 import EmissionsClient                                            from '@/components/emissions/EmissionsClient';
+import { wpTags }                                                 from '@/lib/revalidateTags';
 
 export default async function EmissionsPage() {
   const [categoriesResult, emissionsResult] = await Promise.allSettled([
     fetchGraphQL<GetEmissionCategoriesData>(
       GET_EMISSION_CATEGORIES,
       {},
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: [wpTags.emissions] } },
     ),
     fetchGraphQL<GetEmissionsData>(
       GET_EMISSIONS_ALL,
       { first: 4, after: null },
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: [wpTags.emissions] } },
     ),
   ]);
 

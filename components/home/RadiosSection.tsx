@@ -4,6 +4,7 @@ import type { RadioCard }    from '@/app/data';
 import { GET_RADIOS }        from '@/graphql/radios';
 import type { GetRadiosData } from '@/graphql/radios';
 import RadiosSlider          from './RadiosSlider';
+import { wpTags }            from '@/lib/revalidateTags';
 
 interface RadiosSectionProps {
   count?: number;
@@ -15,7 +16,7 @@ export default async function RadiosSection({ count = 20 }: RadiosSectionProps) 
     const data = await fetchGraphQL<GetRadiosData>(
       GET_RADIOS,
       { first: count },
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: [wpTags.radios] } },
     );
     cards = transformRadios(data);
   } catch {

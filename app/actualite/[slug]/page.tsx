@@ -6,6 +6,7 @@ import { GET_ACTUALITE_BY_SLUG }       from '@/graphql/actualites';
 import type { GetActualiteBySlugData } from '@/graphql/actualites';
 import { transformActualiteDetail }    from '@/app/data/actualites/transformer';
 import ArticleDetail                   from '@/components/actualites/ArticleDetail';
+import { wpTags }                      from '@/lib/revalidateTags';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -17,6 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const data = await fetchGraphQL<GetActualiteBySlugData>(
       GET_ACTUALITE_BY_SLUG,
       { slug },
+      { next: { tags: [wpTags.actualite(slug)] } },
     );
     return { title: data.post?.title ?? 'Actualité' };
   } catch {
@@ -34,7 +36,7 @@ export default async function ActualitePage({ params }: Props) {
     data = await fetchGraphQL<GetActualiteBySlugData>(
       GET_ACTUALITE_BY_SLUG,
       { slug },
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: [wpTags.actualite(slug)] } },
     );
   } catch {
     notFound();

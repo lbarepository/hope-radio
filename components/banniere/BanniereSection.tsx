@@ -2,13 +2,18 @@ import dynamic from 'next/dynamic';
 import { fetchGraphQL } from '@/lib/wordpress';
 import { GET_BANNIERES, type GetBannièresData } from '@/graphql/bannieres';
 import { transformBannieres } from '@/app/data';
+import { wpTags } from '@/lib/revalidateTags';
 
 const BanniereSlider = dynamic(() => import('./BanniereSlider'));
 
 export default async function BanniereSection() {
   let data: GetBannièresData;
   try {
-    data = await fetchGraphQL<GetBannièresData>(GET_BANNIERES, {}, { next: { revalidate: 60 } });
+    data = await fetchGraphQL<GetBannièresData>(
+      GET_BANNIERES,
+      {},
+      { next: { revalidate: 60, tags: [wpTags.bannieres] } },
+    );
   } catch {
     return null;
   }
