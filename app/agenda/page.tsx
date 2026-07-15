@@ -10,12 +10,12 @@ export default async function AgendaPage() {
     fetchGraphQL<GetAgendaCategoriesData>(
       GET_AGENDA_CATEGORIES,
       {},
-      { next: { revalidate: 3600 } },
+      { next: { revalidate: 60 } },
     ),
     fetchGraphQL<GetAgendaItemsData>(
       GET_AGENDA_ITEMS,
       { first: 100 },
-      { next: { revalidate: 3600 } },
+      { next: { revalidate: 60 } },
     ),
   ]);
 

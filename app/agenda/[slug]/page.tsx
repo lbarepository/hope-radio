@@ -32,7 +32,7 @@ export default async function AgendaItemPage({ params }: Props) {
     data = await fetchGraphQL<GetAgendaItemBySlugData>(
       GET_AGENDA_ITEM_BY_SLUG,
       { slug },
-      { next: { revalidate: 3600 } },
+      { next: { revalidate: 60 } },
     );
   } catch {
     notFound();

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo, Poppins } from "next/font/google";
 import "./globals.css";
+import "@wordpress/block-library/build-style/style.css";
 /* import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/pagination";*/

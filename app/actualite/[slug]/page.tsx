@@ -34,7 +34,7 @@ export default async function ActualitePage({ params }: Props) {
     data = await fetchGraphQL<GetActualiteBySlugData>(
       GET_ACTUALITE_BY_SLUG,
       { slug },
-      { next: { revalidate: 3600 } },
+      { next: { revalidate: 60 } },
     );
   } catch {
     notFound();

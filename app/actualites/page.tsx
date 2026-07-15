@@ -10,12 +10,12 @@ export default async function ActualitesPage() {
     fetchGraphQL<GetActualiteCategoriesData>(
       GET_ACTUALITE_CATEGORIES,
       {},
-      { next: { revalidate: 3600 } },
+      { next: { revalidate: 60 } },
     ),
     fetchGraphQL<GetActualiteArchiveData>(
       GET_ACTUALITES_ARCHIVE,
       { first: 6, after: null, categoryName: null },
-      { next: { revalidate: 3600 } },
+      { next: { revalidate: 60 } },
     ),
   ]);
 

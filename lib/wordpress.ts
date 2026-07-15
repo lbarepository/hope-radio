@@ -101,7 +101,7 @@ export async function fetchGraphQL<T>(
   // On n'applique le revalidate par défaut que si le caller ne spécifie pas cache.
   const defaultCache: RequestInit = fetchOptions?.cache
     ? {}
-    : { next: { revalidate: 3600 } };
+    : { next: { revalidate: 60 } };
 
   const options: RequestInit = { ...defaultCache, ...fetchOptions };
 
