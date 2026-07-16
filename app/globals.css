@@ -114,7 +114,7 @@ body {
   --wp--preset--font-family--radluka:        'Copyright Radoslaw Lukasiewicz', sans-serif;
 
   /* Layout Gutenberg — content size / wide size */
-  --wp--style--global--content-size: 720px;
+  --wp--style--global--content-size: 1200px;
   --wp--style--global--wide-size:    1139px;
 
   /* Tailles de police */
