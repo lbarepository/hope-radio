@@ -98,6 +98,7 @@ persistant  persistant
 NEXT_PUBLIC_WORDPRESS_URL=https://admin.radio.fr
 NEXT_PUBLIC_GRAPHQL_ENDPOINT=https://admin.radio.fr/graphql
 FAUST_SECRET_KEY=xxx
+RSS_FEED_URL=https://feed.ausha.co/xxx   # flux RSS Ausha de la page /podcasts (server-side only, pas de persistance en base)
 
 # wordpress/wp-config.php
 FAUST_SECRET_KEY=xxx
