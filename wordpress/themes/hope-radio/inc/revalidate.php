@@ -9,10 +9,11 @@ add_action('transition_post_status', function (string $new_status, string $old_s
     $revalidate_key = defined('REVALIDATE_SECRET_KEY') ? REVALIDATE_SECRET_KEY : '';
 
     if (!$frontend_url || !$revalidate_key) {
+        error_log('[revalidate] annulé : frontend_url ou secret manquant (post #' . $post->ID . ')');
         return;
     }
 
-    wp_remote_post(trailingslashit($frontend_url) . 'api/revalidate', [
+    $response = wp_remote_post(trailingslashit($frontend_url) . 'api/revalidate', [
         'timeout'  => 5,
         'blocking' => false,
         'headers'  => [
@@ -25,4 +26,8 @@ add_action('transition_post_status', function (string $new_status, string $old_s
             'uri'      => wp_make_link_relative(get_permalink($post)),
         ]),
     ]);
+
+    if (is_wp_error($response)) {
+        error_log('[revalidate] échec de la requête vers ' . $frontend_url . ' : ' . $response->get_error_message());
+    }
 }, 10, 3);
