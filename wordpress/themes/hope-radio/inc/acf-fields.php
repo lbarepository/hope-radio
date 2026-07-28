@@ -326,11 +326,37 @@ acf_add_local_field_group([
             'instructions' => 'Ex : https://www.hoperadiofrance.fr — utilisée pour invalider le cache à chaque publication.',
             'required'     => 0,
         ],
+        [
+            'key'   => 'field_tab_podcasts',
+            'label' => 'Podcasts',
+            'type'  => 'tab',
+        ],
+        [
+            'key'          => 'field_podcasts_rss_feed_url',
+            'label'        => 'URL du flux RSS',
+            'name'         => 'rss_feed_url',
+            'type'         => 'url',
+            'instructions' => 'Flux RSS Ausha affiché sur la page /podcasts (ex : https://feed.ausha.co/xxx). Le flux est interrogé directement, aucun contenu n\'est enregistré en base.',
+            'required'     => 1,
+        ],
     ],
     'location' => [
         [['param' => 'options_page', 'operator' => '==', 'value' => 'theme-options']],
     ],
 ]);
+
+// Expose l'URL du flux RSS des podcasts via WPGraphQL.
+// Même pattern manuel que footerData/faqData/bannieres : les champs ACF
+// d'options page ne sont pas exposés nativement par show_in_graphql.
+add_action('graphql_register_types', function () {
+    register_graphql_field('RootQuery', 'rssFeedUrl', [
+        'type'        => 'String',
+        'description' => 'URL du flux RSS des podcasts, gérée via Options du thème',
+        'resolve'     => function () {
+            return get_field('rss_feed_url', 'option') ?: null;
+        },
+    ]);
+});
 
 // ── Promotions (bannières — option de thème) ─────────────────────────────────
 //
