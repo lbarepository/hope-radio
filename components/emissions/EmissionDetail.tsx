@@ -1,17 +1,21 @@
 import Image  from 'next/image';
-import { normalizeWpImageUrl } from '@/lib/wordpress';
-import ShareButton             from './ShareButton';
-import type { EmissionDetail } from '@/app/data/emissions/transformer';
+import { normalizeWpImageUrl }   from '@/lib/wordpress';
+import ShareButton               from './ShareButton';
+import PodcastEmissionItem       from './PodcastEmissionItem';
+import type { EmissionDetail }   from '@/app/data/emissions/transformer';
+import type { PodcastEpisode }   from '@/lib/podcasts';
 
 interface Props {
   emission: EmissionDetail;
   horaire:  string | null;
+  podcasts: PodcastEpisode[];
 }
 
-export default function EmissionDetail({ emission, horaire }: Props) {
+export default function EmissionDetail({ emission, horaire, podcasts }: Props) {
   const { title, animateurs, excerpt, image } = emission;
 
   return (
+    <>
     <main className="bg-primary bg-[url('/images/slider-bg.png')] bg-repeat overflow-hidden">
       <div className="max-w-[1139px] mx-auto px-6 lg:px-8 py-16 lg:py-0 lg:min-h-[580px] flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
 
@@ -75,6 +79,24 @@ export default function EmissionDetail({ emission, horaire }: Props) {
         </div>
 
       </div>
+
+      
     </main>
+    {podcasts.length > 0 && (
+      <section className="bg-[#720049] py-16">
+        <div className="max-w-[980px] mx-auto px-6 lg:px-0">
+          <h3 className="font-nav font-[900] text-[28px] md:text-[32px] leading-[110%] text-white uppercase mb-8">
+            Podcasts disponibles
+          </h3>
+          <div className="grid grid-cols-1 gap-6">
+            {podcasts.map((episode) => (
+              <PodcastEmissionItem key={episode.id} episode={episode} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+    </>
+    
   );
 }
