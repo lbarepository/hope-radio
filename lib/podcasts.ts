@@ -40,6 +40,11 @@ function textOf(value: unknown): string {
   return '';
 }
 
+function truncateToLastSentence(text: string): string {
+  const firstPeriod = text.indexOf('.');
+  return firstPeriod === -1 ? text : text.slice(0, firstPeriod + 1);
+}
+
 /**
  * Fetch et parse le flux RSS dont l'URL est configurée dans WordPress
  * (Options du thème → Podcasts → rss_feed_url). Rien n'est persisté :
@@ -67,7 +72,7 @@ export async function fetchPodcastChannel(): Promise<PodcastChannel | null> {
     const episodes: PodcastEpisode[] = asArray(channel.item).map((item) => ({
       id:           textOf(item.guid) || item.title,
       title:        textOf(item.title),
-      description:  textOf(item.description).replace(/<[^>]*>/g, '').trim(),
+      description:  truncateToLastSentence(textOf(item.description).replace(/<[^>]*>/g, '').trim()),
       imageUrl:     item['itunes:image']?.['@_href'] ?? channelImageUrl,
       audioUrl:     item.enclosure?.['@_url'] ?? '',
       pubDate:      textOf(item.pubDate),
