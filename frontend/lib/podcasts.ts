@@ -5,12 +5,14 @@ import { GET_RSS_FEED_URL }         from '@/graphql/podcasts';
 import type { GetRssFeedUrlData }   from '@/graphql/podcasts';
 
 export interface PodcastEpisode {
-  id:       string;
-  title:    string;
-  imageUrl: string;
-  audioUrl: string;
-  pubDate:  string;
-  duration: string;
+  id:           string;
+  title:        string;
+  description:  string;
+  imageUrl:     string;
+  audioUrl:     string;
+  pubDate:      string;
+  duration:     string;
+  emissionSlug: string | null;
 }
 
 export interface PodcastChannel {
@@ -63,12 +65,14 @@ export async function fetchPodcastChannel(): Promise<PodcastChannel | null> {
       channel.image?.url ?? channel['itunes:image']?.['@_href'] ?? '';
 
     const episodes: PodcastEpisode[] = asArray(channel.item).map((item) => ({
-      id:       textOf(item.guid) || item.title,
-      title:    textOf(item.title),
-      imageUrl: item['itunes:image']?.['@_href'] ?? channelImageUrl,
-      audioUrl: item.enclosure?.['@_url'] ?? '',
-      pubDate:  textOf(item.pubDate),
-      duration: textOf(item['itunes:duration']),
+      id:           textOf(item.guid) || item.title,
+      title:        textOf(item.title),
+      description:  textOf(item.description).replace(/<[^>]*>/g, '').trim(),
+      imageUrl:     item['itunes:image']?.['@_href'] ?? channelImageUrl,
+      audioUrl:     item.enclosure?.['@_url'] ?? '',
+      pubDate:      textOf(item.pubDate),
+      duration:     textOf(item['itunes:duration']),
+      emissionSlug: textOf(item['itunes:keywords']).split(',')[0]?.trim() || null,
     }));
 
     return {
@@ -80,4 +84,12 @@ export async function fetchPodcastChannel(): Promise<PodcastChannel | null> {
     console.error('[podcasts] échec du fetch/parse du flux RSS :', err);
     return null;
   }
+}
+
+/**
+ * Filtre les épisodes rattachés à une émission via le tag `itunes:keywords`
+ * (docs/podcasts/podcast-emission.md).
+ */
+export function getEpisodesForEmission(episodes: PodcastEpisode[], slug: string): PodcastEpisode[] {
+  return episodes.filter((episode) => episode.emissionSlug === slug);
 }

@@ -9,6 +9,7 @@ import type { GetGrilleSlotsData }                            from '@/graphql/gr
 import { transformEmissionDetail }                            from '@/app/data/emissions/transformer';
 import EmissionDetail                                         from '@/components/emissions/EmissionDetail';
 import { wpTags }                                             from '@/lib/revalidateTags';
+import { fetchPodcastChannel, getEpisodesForEmission }         from '@/lib/podcasts';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -59,7 +60,7 @@ export default async function EmissionPage({ params }: Props) {
   const { slug } = await params;
   const { dateDebut, dateFin } = getTwoWeekRange();
 
-  const [emissionResult, grilleResult] = await Promise.allSettled([
+  const [emissionResult, grilleResult, podcastChannel] = await Promise.allSettled([
     fetchGraphQL<GetEmissionBySlugData>(
       GET_EMISSION_BY_SLUG,
       { slug },
@@ -70,6 +71,7 @@ export default async function EmissionPage({ params }: Props) {
       { dateDebut, dateFin },
       { next: { revalidate: 60, tags: [wpTags.grille] } },
     ),
+    fetchPodcastChannel(),
   ]);
 
   if (emissionResult.status === 'rejected') notFound();
@@ -80,5 +82,8 @@ export default async function EmissionPage({ params }: Props) {
   const grilleData = grilleResult.status === 'fulfilled' ? grilleResult.value : null;
   const horaire    = computeHoraire(grilleData, slug);
 
-  return <EmissionDetail emission={emission} horaire={horaire} />;
+  const channel  = podcastChannel.status === 'fulfilled' ? podcastChannel.value : null;
+  const podcasts = getEpisodesForEmission(channel?.episodes ?? [], slug);
+
+  return <EmissionDetail emission={emission} horaire={horaire} podcasts={podcasts} />;
 }

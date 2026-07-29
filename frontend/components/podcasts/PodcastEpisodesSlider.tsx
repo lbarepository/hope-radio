@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
@@ -71,7 +72,13 @@ export default function PodcastEpisodesSlider({ episodes }: PodcastEpisodesSlide
     >
       {episodes.map((episode) => (
         <SwiperSlide key={episode.id}>
-          <EpisodeCard episode={episode} />
+          {episode.emissionSlug ? (
+            <Link href={`/emissions/${episode.emissionSlug}`} className="block">
+              <EpisodeCard episode={episode} />
+            </Link>
+          ) : (
+            <EpisodeCard episode={episode} />
+          )}
         </SwiperSlide>
       ))}
     </Swiper>
