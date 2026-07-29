@@ -45,6 +45,39 @@ function truncateToLastSentence(text: string): string {
   return firstPeriod === -1 ? text : text.slice(0, firstPeriod + 1);
 }
 
+/** Formate un nombre de secondes au format d'affichage "mn:ss". */
+export function formatSeconds(totalSeconds: number): string {
+  const safeSeconds = Math.max(0, Math.floor(totalSeconds));
+  const minutes = Math.floor(safeSeconds / 60);
+  const seconds = safeSeconds % 60;
+  return `${minutes}:${String(seconds).padStart(2, '0')}`;
+}
+
+/** Convertit une durée `itunes:duration` (secondes brutes, "mm:ss" ou "hh:mm:ss") en secondes. */
+export function parseDurationToSeconds(duration: string): number {
+  if (!duration) return 0;
+
+  const parts = duration.split(':').map(Number);
+  if (parts.some(Number.isNaN)) return 0;
+
+  if (parts.length === 3) {
+    return parts[0] * 3600 + parts[1] * 60 + parts[2];
+  }
+  if (parts.length === 2) {
+    return parts[0] * 60 + parts[1];
+  }
+  return parts[0];
+}
+
+/**
+ * Normalise une durée `itunes:duration` (secondes brutes, "mm:ss" ou "hh:mm:ss")
+ * vers le format d'affichage "mn:ss".
+ */
+export function formatDuration(duration: string): string {
+  if (!duration) return '';
+  return formatSeconds(parseDurationToSeconds(duration));
+}
+
 /**
  * Fetch et parse le flux RSS dont l'URL est configurée dans WordPress
  * (Options du thème → Podcasts → rss_feed_url). Rien n'est persisté :

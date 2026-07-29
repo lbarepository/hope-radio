@@ -25,6 +25,7 @@ export default function RadioPlayer() {
   const setPlaying = usePlayerStore((s) => s.setPlaying);
   const setVolume = usePlayerStore((s) => s.setVolume);
   const setMeta = usePlayerStore((s) => s.setMeta);
+  const setCurrentTime = usePlayerStore((s) => s.setCurrentTime);
   const streamUrl = usePlayerStore((s) => s.streamUrl);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -56,25 +57,31 @@ export default function RadioPlayer() {
     const audio = getAudio();
     audioRef.current = audio;
 
-    const onWaiting = () => setIsLoading(true);
-    const onPlaying = () => setIsLoading(false);
-    const onError   = () => { setIsLoading(false); setPlaying(false); };
+    const onWaiting    = () => setIsLoading(true);
+    const onPlaying    = () => setIsLoading(false);
+    const onError      = () => { setIsLoading(false); setPlaying(false); };
+    const onTimeUpdate = () => setCurrentTime(audio.currentTime);
+    const onEnded      = () => { setIsLoading(false); usePlayerStore.getState().stopStream(); };
 
-    audio.addEventListener('waiting', onWaiting);
-    audio.addEventListener('playing', onPlaying);
-    audio.addEventListener('error',   onError);
+    audio.addEventListener('waiting',    onWaiting);
+    audio.addEventListener('playing',    onPlaying);
+    audio.addEventListener('error',      onError);
+    audio.addEventListener('timeupdate', onTimeUpdate);
+    audio.addEventListener('ended',      onEnded);
 
     return () => {
-      audio.removeEventListener('waiting', onWaiting);
-      audio.removeEventListener('playing', onPlaying);
-      audio.removeEventListener('error',   onError);
+      audio.removeEventListener('waiting',    onWaiting);
+      audio.removeEventListener('playing',    onPlaying);
+      audio.removeEventListener('error',      onError);
+      audio.removeEventListener('timeupdate', onTimeUpdate);
+      audio.removeEventListener('ended',      onEnded);
       audio.pause();
       audio.src = '';
       if (preconnectTimerRef.current) clearTimeout(preconnectTimerRef.current);
       preconnectRef.current?.remove();
       preconnectRef.current = null;
     };
-  }, [setPlaying]);
+  }, [setPlaying, setCurrentTime]);
 
   // Sync play/pause
   useEffect(() => {
