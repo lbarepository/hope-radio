@@ -17,7 +17,6 @@ export interface AgendaItemNode {
   content:       string | null;
   featuredImage: { node: { sourceUrl: string; altText: string } } | null;
   agendaCategories: { nodes: { name: string; slug: string }[] };
-  // agendaInfos sera disponible après déploiement WP (show_in_graphql sur le groupe ACF)
   agendaInfos?: {
     dateEvenement: string | null;
     lien:          string | null;
@@ -40,8 +39,6 @@ export interface GetAgendaItemBySlugData {
 
 // ─── Fragment ─────────────────────────────────────────────────────────────────
 
-// agendaInfos (dateEvenement, lien) disponible après déploiement de acf-fields.php
-// avec show_in_graphql: true sur le groupe agenda
 const AGENDA_NODE_FIELDS = `
   id
   title
@@ -58,6 +55,10 @@ const AGENDA_NODE_FIELDS = `
       name
       slug
     }
+  }
+  agendaInfos {
+    dateEvenement
+    lien
   }
 `;
 
