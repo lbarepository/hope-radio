@@ -15,7 +15,7 @@ import { isExternalUrl, isSafeHref } from '@/lib/wordpress';
 
 const BUTTON1_CN = 'font-button font-semibold inline-flex items-center shrink-0 cursor-pointer max-[768px]:w-full max-[768px]:justify-center rounded-[30px] bg-white text-primary text-base h-[50px] px-[30px] py-[10px] whitespace-nowrap';
 const BUTTON2_CN = 'font-button font-semibold flex items-center gap-3 shrink-0 cursor-pointer max-[768px]:w-full max-[768px]:justify-center rounded-[30px] bg-[#5A3D75] text-white text-sm h-[50px] px-6 whitespace-nowrap';
-const NAV_BUTTON_CN = 'flex items-center justify-center w-11 h-11 rounded-full border-2 border-white bg-transparent cursor-pointer transition-colors hover:bg-white/10 max-[980px]:w-9 max-[980px]:h-9';
+const NAV_BUTTON_CN = 'flex items-center justify-center w-9 h-9 rounded-full border-2 border-white bg-transparent cursor-pointer transition-colors hover:bg-white/10 max-[980px]:w-8 max-[980px]:h-8';
 
 // ─── Composant ────────────────────────────────────────────────────────────────
 
@@ -47,7 +47,7 @@ export default function HeroSlider({ slides }: Props) {
       {/* Conteneur centré 1139px : les flèches restent dans les limites du slide, jamais collées aux bords de l'écran */}
       <div className="relative max-w-[1139px] mx-auto max-[980px]:max-w-none">
         {/* Flèches centrées horizontalement, juste au-dessus de la pagination */}
-        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20 flex items-center gap-4 max-[980px]:bottom-12">
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 max-[980px]:bottom-8">
           <button ref={prevRef} type="button" aria-label="Diapositive précédente" className={NAV_BUTTON_CN}>
             <ArrowIcon direction="left" />
           </button>
@@ -124,7 +124,8 @@ export default function HeroSlider({ slides }: Props) {
                   max-[980px]:mx-auto
                   max-[980px]:min-h-[400px]
                   max-[980px]:self-auto
-                  relative
+                  relative overflow-hidden
+                  rounded-tl-[10px] rounded-tr-[10px]
                 "
               >
                 {/* Tag mobile — positionné en bas à gauche de l'image */}
@@ -141,7 +142,7 @@ export default function HeroSlider({ slides }: Props) {
                   />
                 ) : (
                   /* Placeholder en attente de l'image WordPress */
-                  <div className="w-full h-full flex items-end justify-center pb-8 bg-[rgba(255,255,255,0.07)] rounded-t-lg">
+                  <div className="w-full h-full flex items-end justify-center pb-8 bg-[rgba(255,255,255,0.07)]">
                     <span className="font-heading uppercase text-[rgba(255,255,255,0.3)] text-xs tracking-[0.15em]">
                       Image à la une
                     </span>
