@@ -13,6 +13,7 @@
   - `frontend/components/emissions/EmissionDetail.tsx`
   - `frontend/components/actualites/ArticleDetail.tsx`
   - `frontend/app/[...slug]/page.tsx`
+  - `frontend/lib/wpBlockContent.tsx` (découpe `content` en segments, chaque segment HTML étant ensuite passé à `dangerouslySetInnerHTML` par l'appelant)
 - **Problème** : le HTML issu de WordPress (`content`) est injecté tel quel via `dangerouslySetInnerHTML`, sans sanitization. Si un compte admin WordPress est compromis (ou si du contenu tiers non fiable est un jour intégré via ce champ), du JS arbitraire pourrait s'exécuter côté client.
 - **Contexte / risque actuel** : contenu saisi uniquement par les administrateurs via l'éditeur Gutenberg (back-office de confiance) — risque jugé faible en l'état, mais pas nul (défense en profondeur recommandée).
 - **Correctif proposé** : sanitizer le HTML avant rendu avec `isomorphic-dompurify` :
