@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function EmissionDetail({ emission, horaire, podcasts }: Props) {
-  const { title, animateurs, excerpt, image } = emission;
+  const { title, animateurs, content, image } = emission;
 
   return (
     <>
@@ -64,13 +64,12 @@ export default function EmissionDetail({ emission, horaire, podcasts }: Props) {
             </p>
           )}
 
-          {excerpt && (
-            <p
+          {content && (
+            <div
               className="text-white"
-              style={{ fontSize: '12px', lineHeight: '25px', textTransform: 'capitalize', fontFamily: 'Poppins, sans-serif' }}
-            >
-              {excerpt}
-            </p>
+              style={{ fontSize: '12px', lineHeight: '25px', fontFamily: 'Poppins, sans-serif' }}
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
           )}
 
           <div className="flex items-center gap-4 mt-2">
