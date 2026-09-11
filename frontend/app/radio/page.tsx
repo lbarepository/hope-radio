@@ -1,7 +1,12 @@
+import EquipeSection from '@/components/equipe/EquipeSection';
+
+// Page "La radio" : histoire, équipe, chiffres clés, zones de diffusion.
+// Seule la section Équipe est branchée pour le moment — le reste (histoire,
+// chiffres clés, zones de diffusion) reste à construire.
 export default function RadioPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      HOPE LA RADIO 
-    </div>
+    <main className="min-h-screen bg-white">
+      <EquipeSection />
+    </main>
   );
 }

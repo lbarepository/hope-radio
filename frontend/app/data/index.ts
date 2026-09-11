@@ -42,3 +42,7 @@ export type { ClipCard }   from './clips/transformer';
 // Radios
 export { transformRadios } from './radios/transformer';
 export type { RadioCard }  from './radios/transformer';
+
+// Équipe
+export { transformAnimateurs } from './animateurs/transformer';
+export type { AnimateurCard }  from './animateurs/transformer';

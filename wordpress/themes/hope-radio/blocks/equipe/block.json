@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "hope-radio/equipe",
+  "title": "L'équipe",
+  "category": "hope-radio",
+  "icon": "groups",
+  "description": "Récupère automatiquement les animateurs (CPT Animateur) et les affiche en slider : nom, fonction et photo dans une bulle.",
+  "textdomain": "hope-radio",
+  "attributes": {
+    "titre": {
+      "type": "string",
+      "default": "L'équipe"
+    }
+  },
+  "supports": {
+    "html": false,
+    "align": false
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:../../assets/css/blocks/equipe.css",
+  "render": "file:./render.php"
+}

@@ -1,0 +1,31 @@
+/**
+ * Styles placeholder admin — bloc hope-radio/equipe.
+ * Éditeur Gutenberg uniquement. Le rendu réel (slider) est géré par Next.js.
+ */
+
+.hope-radio-block-placeholder {
+	border: 1px dashed #72004a;
+	border-radius: 8px;
+	padding: 16px 20px;
+	background: #f7ecf3;
+}
+
+.hope-radio-block-placeholder .placeholder-label {
+	display: block;
+	font-weight: 700;
+	color: #72004a;
+	text-transform: uppercase;
+	font-size: 12px;
+	letter-spacing: 0.04em;
+	margin-bottom: 4px;
+}
+
+.hope-radio-block-placeholder .placeholder-description {
+	margin: 0;
+	color: #4a4a4a;
+	font-size: 13px;
+}
+
+.hope-radio-equipe-editor .hope-radio-block-placeholder {
+	margin-top: 12px;
+}

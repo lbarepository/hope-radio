@@ -9,6 +9,7 @@ export const wpTags = {
   podcasts:     'wp:podcasts',
   clips:        'wp:clips',
   radios:       'wp:radios',
+  animateurs:   'wp:animateurs',
   bannieres:    'wp:bannieres',
   slidesHome:   'wp:slides-home',
   page:         (uri: string) => `wp:page:${uri}`,
