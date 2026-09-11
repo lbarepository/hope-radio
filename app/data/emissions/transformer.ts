@@ -20,10 +20,10 @@ export function transformEmissions(data: GetEmissionsData): {
   pageInfo: EmissionPageInfo;
 } {
   const cards = data.emissions.nodes.map((node) => {
-    const animateurNode = node.animateurs?.[0];
-    const animateur = animateurNode
-      ? `${animateurNode.prenom} ${animateurNode.nom}`.trim()
-      : null;
+    const animateur = node.animateurs
+      ?.map((a) => `${a.prenom} ${a.nom}`.trim())
+      .filter(Boolean)
+      .join(', ') || null;
     return {
       id:       node.id,
       title:    node.title,
