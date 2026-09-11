@@ -7,7 +7,7 @@ const ARCHIVE_PATHS_BY_POST_TYPE: Record<string, string[]> = {
   post:          ['/actualites', '/'],
   agenda:        ['/agenda', '/'],
   podcast:       ['/podcast', '/'],
-  animateur:     ['/emissions'],
+  animateur:     ['/emissions', '/radio'],
   nav_menu_item: ['/'],
   page:          ['/'],
 };
@@ -23,7 +23,7 @@ const ARCHIVE_TAGS_BY_POST_TYPE: Record<string, string[]> = {
   post:          [wpTags.actualites],
   agenda:        [wpTags.agendaList],
   podcast:       [wpTags.podcasts],
-  animateur:     [wpTags.emissions],
+  animateur:     [wpTags.emissions, wpTags.animateurs],
   clip:          [wpTags.clips],
   radio:         [wpTags.radios],
   nav_menu_item: [wpTags.menus],

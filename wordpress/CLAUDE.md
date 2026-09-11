@@ -174,7 +174,7 @@ Chaque bloc custom a un fichier de documentation dans `modes/blocs/` et un fichi
 | Nos autres radios | `hope-radio/autres-radios` | À venir | — |
 | Chiffres clés | `hope-radio/chiffres-cles` | À venir | — |
 | Zones de diffusion (accordéon) | `hope-radio/zones-diffusion` | À venir | — |
-| L'équipe | `hope-radio/equipe` | À venir | — |
+| L'équipe | `hope-radio/equipe` | Développé (admin) | `modes/blocs/equipe.md` |
 
 ---
 
