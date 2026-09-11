@@ -162,6 +162,13 @@ body {
   --wp--preset--font-size--text-bouton:        16px;
   --wp--preset--font-size--small-texte:        14px;
   --wp--preset--font-size--text-mobile:        12px;
+
+  /* Espacements (Dimensions > Marge/Padding dans Gutenberg) */
+  --wp--preset--spacing--xs: 8px;
+  --wp--preset--spacing--s:  16px;
+  --wp--preset--spacing--m:  32px;
+  --wp--preset--spacing--l:  64px;
+  --wp--preset--spacing--xl: 96px;
 }
 
 .container {
