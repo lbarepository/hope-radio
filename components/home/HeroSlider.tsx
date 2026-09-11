@@ -1,10 +1,13 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectFade, Pagination, Autoplay } from 'swiper/modules';
+import type { Swiper as SwiperType } from 'swiper';
+import { EffectFade, Pagination, Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 import Link from 'next/link';
 
 import type { HeroSlide, HeroSlideLink } from '@/app/data';
@@ -12,6 +15,7 @@ import { isExternalUrl, isSafeHref } from '@/lib/wordpress';
 
 const BUTTON1_CN = 'font-button font-semibold inline-flex items-center shrink-0 cursor-pointer max-[768px]:w-full max-[768px]:justify-center rounded-[30px] bg-white text-primary text-base h-[50px] px-[30px] py-[10px] whitespace-nowrap';
 const BUTTON2_CN = 'font-button font-semibold flex items-center gap-3 shrink-0 cursor-pointer max-[768px]:w-full max-[768px]:justify-center rounded-[30px] bg-[#5A3D75] text-white text-sm h-[50px] px-6 whitespace-nowrap';
+const NAV_BUTTON_CN = 'absolute top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-11 h-11 rounded-full border-2 border-white bg-transparent cursor-pointer transition-colors hover:bg-white/10 max-[980px]:w-9 max-[980px]:h-9';
 
 // ─── Composant ────────────────────────────────────────────────────────────────
 
@@ -20,16 +24,42 @@ interface Props {
 }
 
 export default function HeroSlider({ slides }: Props) {
+  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
+  const prevRef = useRef<HTMLButtonElement>(null);
+  const nextRef = useRef<HTMLButtonElement>(null);
+
+  // Branche les boutons de navigation externes une fois le Swiper et les refs disponibles
+  useEffect(() => {
+    if (!swiperInstance || !prevRef.current || !nextRef.current) return;
+
+    const { navigation } = swiperInstance.params;
+    if (navigation && typeof navigation !== 'boolean') {
+      navigation.prevEl = prevRef.current;
+      navigation.nextEl = nextRef.current;
+    }
+    swiperInstance.navigation.destroy();
+    swiperInstance.navigation.init();
+    swiperInstance.navigation.update();
+  }, [swiperInstance]);
+
   return (
     <section className="relative w-full overflow-hidden pt-48 max-w-[980px]:pt-32 bg-primary bg-[url('/images/slider-bg.png')] bg-repeat">
+      <button ref={prevRef} type="button" aria-label="Diapositive précédente" className={`${NAV_BUTTON_CN} left-4 max-[980px]:left-2`}>
+        <ArrowIcon direction="left" />
+      </button>
+      <button ref={nextRef} type="button" aria-label="Diapositive suivante" className={`${NAV_BUTTON_CN} right-4 max-[980px]:right-2`}>
+        <ArrowIcon direction="right" />
+      </button>
       <Swiper
-        modules={[EffectFade, Pagination, Autoplay]}
+        modules={[EffectFade, Pagination, Navigation, Autoplay]}
         effect="fade"
         fadeEffect={{ crossFade: true }}
         slidesPerView={1}
         loop
-        /* autoplay={{ delay: 6000, disableOnInteraction: false }} */
+        autoplay={{ delay: 6000, disableOnInteraction: false }}
         pagination={{ clickable: true }}
+        navigation={{ prevEl: prevRef.current, nextEl: nextRef.current }}
+        onSwiper={setSwiperInstance}
         className="hero-slider \!h-[600px] max-[980px]:\!h-auto"
       >
         {slides.map((slide) => {
@@ -153,6 +183,30 @@ function SlideActionLink({
       {label}
       {children}
     </Link>
+  );
+}
+
+// ─── Icône flèche (boutons de navigation du slider) ───────────────────────────
+
+function ArrowIcon({ direction }: { direction: 'left' | 'right' }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="14"
+      viewBox="0 0 18 14"
+      fill="none"
+      className={direction === 'left' ? 'rotate-180' : undefined}
+      aria-hidden="true"
+    >
+      <path
+        d="M11 1L17 7L11 13M17 7H1"
+        stroke="white"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 
