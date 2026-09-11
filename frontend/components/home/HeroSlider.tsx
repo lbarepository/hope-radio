@@ -44,34 +44,36 @@ export default function HeroSlider({ slides }: Props) {
 
   return (
     <section className="relative w-full overflow-hidden pt-48 max-w-[980px]:pt-32 bg-primary bg-[url('/images/slider-bg.png')] bg-repeat">
-      <button ref={prevRef} type="button" aria-label="Diapositive précédente" className={`${NAV_BUTTON_CN} left-4 max-[980px]:left-2`}>
-        <ArrowIcon direction="left" />
-      </button>
-      <button ref={nextRef} type="button" aria-label="Diapositive suivante" className={`${NAV_BUTTON_CN} right-4 max-[980px]:right-2`}>
-        <ArrowIcon direction="right" />
-      </button>
-      <Swiper
-        modules={[EffectFade, Pagination, Navigation, Autoplay]}
-        effect="fade"
-        fadeEffect={{ crossFade: true }}
-        slidesPerView={1}
-        loop
-        autoplay={{ delay: 6000, disableOnInteraction: false }}
-        pagination={{ clickable: true }}
-        navigation={{ prevEl: prevRef.current, nextEl: nextRef.current }}
-        onSwiper={setSwiperInstance}
-        className="hero-slider \!h-[600px] max-[980px]:\!h-auto"
-      >
-        {slides.map((slide) => {
-          const link1 = isValidLink(slide.link1) ? slide.link1 : null;
+      {/* Conteneur centré 1139px : les flèches restent dans les limites du slide, jamais collées aux bords de l'écran */}
+      <div className="relative max-w-[1139px] mx-auto max-[980px]:max-w-none">
+        <button ref={prevRef} type="button" aria-label="Diapositive précédente" className={`${NAV_BUTTON_CN} left-2`}>
+          <ArrowIcon direction="left" />
+        </button>
+        <button ref={nextRef} type="button" aria-label="Diapositive suivante" className={`${NAV_BUTTON_CN} right-2`}>
+          <ArrowIcon direction="right" />
+        </button>
+        <Swiper
+          modules={[EffectFade, Pagination, Navigation, Autoplay]}
+          effect="fade"
+          fadeEffect={{ crossFade: true }}
+          slidesPerView={1}
+          loop
+          autoplay={{ delay: 6000, disableOnInteraction: false }}
+          pagination={{ clickable: true }}
+          navigation={{ prevEl: prevRef.current, nextEl: nextRef.current }}
+          onSwiper={setSwiperInstance}
+          className="hero-slider \!h-[600px] max-[980px]:\!h-auto"
+        >
+          {slides.map((slide) => {
+            const link1 = isValidLink(slide.link1) ? slide.link1 : null;
 
-          return (
-          <SwiperSlide key={slide.id}>
-            {/*
-              Desktop  : flex-row  — texte à gauche, image à droite, 1139px centré
-              Mobile   : flex-col  — image en haut (order-1), texte en bas (order-2)
-            */}
-            <div className="max-w-[1139px] mx-auto h-full flex items-stretch px-8 max-[980px]:flex-col max-[980px]:px-0 max-[980px]:max-w-none">
+            return (
+            <SwiperSlide key={slide.id}>
+              {/*
+                Desktop  : flex-row  — texte à gauche, image à droite, 1139px centré
+                Mobile   : flex-col  — image en haut (order-1), texte en bas (order-2)
+              */}
+              <div className="max-w-[1139px] mx-auto h-full flex items-stretch px-8 max-[980px]:flex-col max-[980px]:px-0 max-[980px]:max-w-none">
 
               {/* ── Colonne texte (gauche desktop / bas mobile) ── */}
               <div className="flex flex-col justify-start gap-6 flex-1 min-w-0 pr-8 pb-12 max-[980px]:order-2 max-[980px]:px-5 max-[980px]:py-8 max-[980px]:bg-[#720049]">
@@ -148,7 +150,8 @@ export default function HeroSlider({ slides }: Props) {
           </SwiperSlide>
           );
         })}
-      </Swiper>
+        </Swiper>
+      </div>
     </section>
   );
 }
