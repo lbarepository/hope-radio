@@ -275,11 +275,12 @@ acf_add_local_field_group([
     ],
 ]);
 
-// ── Mise en avant (hero slider) ──────────────────────────────────────────────
+// ── Mise en avant ─────────────────────────────────────────────────────────────
 //
 // Ce field group est exposé via WPGraphQL for ACF.
 // Accès GraphQL : node { miseEnAvant { isMisEnAvant } }
-// Utilisé pour filtrer les contenus affichés dans le HeroSlider.
+// N'est plus utilisé par le hero de la home (voir Options > Home > Slides,
+// group_promotions ci-dessous) mais reste disponible pour d'autres usages.
 
 acf_add_local_field_group([
     'key'                => 'group_mise_en_avant',
@@ -369,6 +370,57 @@ acf_add_local_field_group([
     'key'      => 'group_promotions',
     'title'    => 'Général',
     'fields'   => [
+        [
+            'key'   => 'field_tab_home',
+            'label' => 'Home',
+            'type'  => 'tab',
+        ],
+        [
+            'key'        => 'field_slides_home',
+            'label'      => 'Slides',
+            'name'       => 'slides_home',
+            'type'       => 'repeater',
+            'layout'     => 'block',
+            'sub_fields' => [
+                [
+                    'key'      => 'field_slide_home_titre',
+                    'label'    => 'Titre',
+                    'name'     => 'titre',
+                    'type'     => 'text',
+                    'required' => 1,
+                ],
+                [
+                    'key'   => 'field_slide_home_description',
+                    'label' => 'Description',
+                    'name'  => 'description',
+                    'type'  => 'textarea',
+                    'rows'  => 3,
+                ],
+                [
+                    'key'           => 'field_slide_home_image',
+                    'label'         => 'Image',
+                    'name'          => 'image',
+                    'type'          => 'image',
+                    'return_format' => 'array',
+                    'preview_size'  => 'medium',
+                    'required'      => 1,
+                ],
+                [
+                    'key'           => 'field_slide_home_lien_1',
+                    'label'         => 'Lien bouton 1',
+                    'name'          => 'lien_1',
+                    'type'          => 'link',
+                    'return_format' => 'array',
+                ],
+                [
+                    'key'           => 'field_slide_home_lien_2',
+                    'label'         => 'Lien bouton 2 (Message en direct)',
+                    'name'          => 'lien_2',
+                    'type'          => 'link',
+                    'return_format' => 'array',
+                ],
+            ],
+        ],
         [
             'key'   => 'field_tab_promotions',
             'label' => 'Promotions',
@@ -651,6 +703,68 @@ add_action('graphql_register_types', function () {
                         'mobile'  => $mobile  ? ['sourceUrl' => $mobile['url']  ?? null, 'altText' => $mobile['alt']  ?? ''] : null,
                     ],
                     'lien'      => $row['lien'] ?? null,
+                ];
+            }, $rows);
+        },
+    ]);
+});
+
+// Expose les slides du hero home via WPGraphQL.
+// Le resolver lit get_field('slides_home', 'option') et mappe chaque item
+// du répéteur ACF vers le type SlideHomeItem (même pattern que bannieres).
+add_action('graphql_register_types', function () {
+    register_graphql_object_type('SlideHomeImage', [
+        'description' => 'Image du slide home avec URL et texte alternatif',
+        'fields'      => [
+            'sourceUrl' => ['type' => 'String'],
+            'altText'   => ['type' => 'String'],
+        ],
+    ]);
+
+    register_graphql_object_type('SlideHomeLink', [
+        'description' => 'Lien de bouton du slide home (URL, libellé, cible)',
+        'fields'      => [
+            'url'    => ['type' => 'String'],
+            'title'  => ['type' => 'String'],
+            'target' => ['type' => 'String'],
+        ],
+    ]);
+
+    register_graphql_object_type('SlideHomeItem', [
+        'description' => 'Élément du slider hero de la home',
+        'fields'      => [
+            'titre'       => ['type' => 'String'],
+            'description' => ['type' => 'String'],
+            'image'       => ['type' => 'SlideHomeImage'],
+            'lien1'       => ['type' => 'SlideHomeLink'],
+            'lien2'       => ['type' => 'SlideHomeLink'],
+        ],
+    ]);
+
+    register_graphql_field('RootQuery', 'slidesHome', [
+        'type'        => ['list_of' => 'SlideHomeItem'],
+        'description' => 'Slides du hero de la home gérées via Options du thème > Home',
+        'resolve'     => function () {
+            $rows = get_field('slides_home', 'option');
+            if (empty($rows) || !is_array($rows)) return [];
+
+            $mapLink = function ($link) {
+                if (empty($link) || empty($link['url'])) return null;
+                return [
+                    'url'    => $link['url'],
+                    'title'  => $link['title']  ?: null,
+                    'target' => $link['target'] ?: null,
+                ];
+            };
+
+            return array_map(function ($row) use ($mapLink) {
+                $image = $row['image'] ?? null;
+                return [
+                    'titre'       => $row['titre']       ?? null,
+                    'description' => $row['description'] ?? null,
+                    'image'       => $image ? ['sourceUrl' => $image['url'] ?? null, 'altText' => $image['alt'] ?? ''] : null,
+                    'lien1'       => $mapLink($row['lien_1'] ?? null),
+                    'lien2'       => $mapLink($row['lien_2'] ?? null),
                 ];
             }, $rows);
         },

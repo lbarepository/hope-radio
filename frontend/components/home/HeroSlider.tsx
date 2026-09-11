@@ -7,27 +7,19 @@ import 'swiper/css/effect-fade';
 import 'swiper/css/pagination';
 import Link from 'next/link';
 
-import { MOCK_FEATURED_CONTENT, transformFeaturedContent } from '@/app/data';
-import type { FeaturedSlide, PostType } from '@/app/data';
+import type { HeroSlide, HeroSlideLink } from '@/app/data';
+import { isExternalUrl, isSafeHref } from '@/lib/wordpress';
 
-// ─── CTA labels par post type ─────────────────────────────────────────────────
-
-const CTA_LABELS: Record<PostType, string> = {
-  emission: "L'émission",
-  podcast:  'Le podcast',
-  post:     "L'article",
-  agenda:   "L'événement",
-};
-
-// ─── Données mock centralisées ────────────────────────────────────────────────
-// Remplacer MOCK_FEATURED_CONTENT par fetchGraphQL<GetFeaturedContentData>(GET_FEATURED_CONTENT)
-// une fois WordPress en place.
-
-const SLIDES: FeaturedSlide[] = transformFeaturedContent(MOCK_FEATURED_CONTENT);
+const BUTTON1_CN = 'font-button font-semibold inline-flex items-center shrink-0 cursor-pointer max-[768px]:w-full max-[768px]:justify-center rounded-[30px] bg-white text-primary text-base h-[50px] px-[30px] py-[10px] whitespace-nowrap';
+const BUTTON2_CN = 'font-button font-semibold flex items-center gap-3 shrink-0 cursor-pointer max-[768px]:w-full max-[768px]:justify-center rounded-[30px] bg-[#5A3D75] text-white text-sm h-[50px] px-6 whitespace-nowrap';
 
 // ─── Composant ────────────────────────────────────────────────────────────────
 
-export default function HeroSlider() {
+interface Props {
+  slides: HeroSlide[];
+}
+
+export default function HeroSlider({ slides }: Props) {
   return (
     <section className="relative w-full overflow-hidden pt-48 max-w-[980px]:pt-32 bg-primary bg-[url('/images/slider-bg.png')] bg-repeat">
       <Swiper
@@ -40,7 +32,11 @@ export default function HeroSlider() {
         pagination={{ clickable: true }}
         className="hero-slider \!h-[600px] max-[980px]:\!h-auto"
       >
-        {SLIDES.map((slide) => (
+        {slides.map((slide) => {
+          const link1 = isValidLink(slide.link1) ? slide.link1 : null;
+          const link2 = isValidLink(slide.link2) ? slide.link2 : null;
+
+          return (
           <SwiperSlide key={slide.id}>
             {/*
               Desktop  : flex-row  — texte à gauche, image à droite, 1139px centré
@@ -72,33 +68,21 @@ export default function HeroSlider() {
                 <div className="flex flex-col items-start gap-3 min-[769px]:flex-row min-[769px]:items-center min-[769px]:flex-wrap">
 
                   {/* Bouton 1 — vers le contenu */}
-                  <Link
-                    href={slide.link}
-                    className="font-button font-semibold inline-flex items-center shrink-0 cursor-pointer max-[768px]:w-full max-[768px]:justify-center rounded-[30px] bg-white text-primary text-base h-[50px] px-[30px] py-[10px] whitespace-nowrap"
-                  >
-                    {CTA_LABELS[slide.type]}
-                  </Link>
+                  {link1 && (
+                    <SlideActionLink link={link1} defaultLabel="En savoir plus" className={BUTTON1_CN} />
+                  )}
 
                   {/* Bouton 2 — Message en direct */}
-                  <button
-                    type="button"
-                    className="font-button font-semibold flex items-center gap-3 shrink-0 cursor-pointer max-[768px]:w-full max-[768px]:justify-center rounded-[30px] bg-[#5A3D75] text-white text-sm h-[50px] px-6 whitespace-nowrap"
-                  >
-                    Message en direct
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="26"
-                      height="19"
-                      viewBox="0 0 26 19"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M19 0C22.866 1.93277e-07 26 3.13401 26 7C26 10.866 22.866 14 19 14H8.16504L6 19L3.4043 13.0059C1.3652 11.7824 0 9.55105 0 7C0 3.13401 3.13401 1.93277e-07 7 0H19Z"
-                        fill="white"
-                      />
-                    </svg>
-                  </button>
+                  {link2 ? (
+                    <SlideActionLink link={link2} defaultLabel="Message en direct" className={BUTTON2_CN}>
+                      <LiveIcon />
+                    </SlideActionLink>
+                  ) : (
+                    <button type="button" className={BUTTON2_CN}>
+                      Message en direct
+                      <LiveIcon />
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -139,8 +123,62 @@ export default function HeroSlider() {
 
             </div>
           </SwiperSlide>
-        ))}
+          );
+        })}
       </Swiper>
     </section>
+  );
+}
+
+// ─── Lien de bouton (champ ACF "Lien" : url + libellé + cible) ────────────────
+
+function isValidLink(link: HeroSlideLink | null): link is HeroSlideLink {
+  return !!link && isSafeHref(link.url);
+}
+
+function SlideActionLink({
+  link,
+  defaultLabel,
+  className,
+  children,
+}: {
+  link: HeroSlideLink;
+  defaultLabel: string;
+  className: string;
+  children?: React.ReactNode;
+}) {
+  const label = link.label || defaultLabel;
+  const openInNewTab = link.target === '_blank' || isExternalUrl(link.url);
+
+  return openInNewTab ? (
+    <a href={link.url} target="_blank" rel="noopener noreferrer" className={className}>
+      {label}
+      {children}
+    </a>
+  ) : (
+    <Link href={link.url} className={className}>
+      {label}
+      {children}
+    </Link>
+  );
+}
+
+// ─── Icône micro (bouton "Message en direct") ─────────────────────────────────
+
+function LiveIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="26"
+      height="19"
+      viewBox="0 0 26 19"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M19 0C22.866 1.93277e-07 26 3.13401 26 7C26 10.866 22.866 14 19 14H8.16504L6 19L3.4043 13.0059C1.3652 11.7824 0 9.55105 0 7C0 3.13401 3.13401 1.93277e-07 7 0H19Z"
+        fill="white"
+      />
+    </svg>
   );
 }

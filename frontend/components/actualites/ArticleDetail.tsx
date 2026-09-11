@@ -1,14 +1,9 @@
 import Image from 'next/image';
 import Link  from 'next/link';
-import { normalizeWpImageUrl, isExternalUrl } from '@/lib/wordpress';
+import { normalizeWpImageUrl, isExternalUrl, isSafeHref } from '@/lib/wordpress';
 import type { ActualiteDetail } from '@/app/data/actualites/transformer';
 
 const BUTTON_CN = 'font-button font-semibold inline-flex items-center justify-center self-start rounded-[30px] bg-secondary text-white text-sm h-[44px] px-6 whitespace-nowrap hover:bg-secondary/90 transition-colors no-underline';
-
-// N'autorise que les liens http(s), relatifs ou ancres — rejette javascript:, data:, vbscript:, etc.
-function isSafeHref(url: string): boolean {
-  return /^(https?:\/\/|\/|#)/i.test(url.trim());
-}
 
 interface Props {
   article: ActualiteDetail;
