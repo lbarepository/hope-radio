@@ -10,6 +10,7 @@ export const wpTags = {
   clips:        'wp:clips',
   radios:       'wp:radios',
   bannieres:    'wp:bannieres',
+  slidesHome:   'wp:slides-home',
   page:         (uri: string) => `wp:page:${uri}`,
   menus:        'wp:menus',
 } as const;

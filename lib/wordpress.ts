@@ -59,6 +59,11 @@ export function isExternalUrl(url: string): boolean {
   }
 }
 
+/** N'autorise que les liens http(s), relatifs ou ancres — rejette javascript:, data:, vbscript:, etc. */
+export function isSafeHref(url: string): boolean {
+  return /^(https?:\/\/|\/|#)/i.test(url.trim());
+}
+
 const GRAPHQL_TIMEOUT_MS = 15_000;
 const GRAPHQL_RETRIES    = 1;
 
