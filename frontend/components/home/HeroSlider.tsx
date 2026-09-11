@@ -15,7 +15,7 @@ import { isExternalUrl, isSafeHref } from '@/lib/wordpress';
 
 const BUTTON1_CN = 'font-button font-semibold inline-flex items-center shrink-0 cursor-pointer max-[768px]:w-full max-[768px]:justify-center rounded-[30px] bg-white text-primary text-base h-[50px] px-[30px] py-[10px] whitespace-nowrap';
 const BUTTON2_CN = 'font-button font-semibold flex items-center gap-3 shrink-0 cursor-pointer max-[768px]:w-full max-[768px]:justify-center rounded-[30px] bg-[#5A3D75] text-white text-sm h-[50px] px-6 whitespace-nowrap';
-const NAV_BUTTON_CN = 'absolute top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-11 h-11 rounded-full border-2 border-white bg-transparent cursor-pointer transition-colors hover:bg-white/10 max-[980px]:w-9 max-[980px]:h-9';
+const NAV_BUTTON_CN = 'flex items-center justify-center w-11 h-11 rounded-full border-2 border-white bg-transparent cursor-pointer transition-colors hover:bg-white/10 max-[980px]:w-9 max-[980px]:h-9';
 
 // ─── Composant ────────────────────────────────────────────────────────────────
 
@@ -46,12 +46,15 @@ export default function HeroSlider({ slides }: Props) {
     <section className="relative w-full overflow-hidden pt-48 max-w-[980px]:pt-32 bg-primary bg-[url('/images/slider-bg.png')] bg-repeat">
       {/* Conteneur centré 1139px : les flèches restent dans les limites du slide, jamais collées aux bords de l'écran */}
       <div className="relative max-w-[1139px] mx-auto max-[980px]:max-w-none">
-        <button ref={prevRef} type="button" aria-label="Diapositive précédente" className={`${NAV_BUTTON_CN} left-2`}>
-          <ArrowIcon direction="left" />
-        </button>
-        <button ref={nextRef} type="button" aria-label="Diapositive suivante" className={`${NAV_BUTTON_CN} right-2`}>
-          <ArrowIcon direction="right" />
-        </button>
+        {/* Flèches centrées horizontalement, juste au-dessus de la pagination */}
+        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20 flex items-center gap-4 max-[980px]:bottom-12">
+          <button ref={prevRef} type="button" aria-label="Diapositive précédente" className={NAV_BUTTON_CN}>
+            <ArrowIcon direction="left" />
+          </button>
+          <button ref={nextRef} type="button" aria-label="Diapositive suivante" className={NAV_BUTTON_CN}>
+            <ArrowIcon direction="right" />
+          </button>
+        </div>
         <Swiper
           modules={[EffectFade, Pagination, Navigation, Autoplay]}
           effect="fade"
