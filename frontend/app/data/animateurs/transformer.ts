@@ -14,7 +14,7 @@ export function transformAnimateurs(data: GetAnimateursData): AnimateurCard[] {
   return data.animateurs.nodes.map((node) => {
     const infos = node.animateurInfos;
     const nom = [infos?.prenom, infos?.nom].filter(Boolean).join(' ').trim() || node.title;
-    const image = infos?.photo?.node ?? node.featuredImage?.node ?? null;
+    const image = infos?.photo?.node ?? null;
 
     return {
       id:       node.id,
