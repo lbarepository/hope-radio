@@ -21,7 +21,6 @@ export interface AnimateurNode {
   id:             string;
   title:          string;
   animateurInfos: AnimateurInfosNode | null;
-  featuredImage:  { node: AnimateurImageNode } | null;
 }
 
 export interface GetAnimateursData {
@@ -45,12 +44,6 @@ export const GET_ANIMATEURS = /* GraphQL */ `
               sourceUrl
               altText
             }
-          }
-        }
-        featuredImage {
-          node {
-            sourceUrl
-            altText
           }
         }
       }

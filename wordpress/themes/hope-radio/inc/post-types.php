@@ -51,7 +51,7 @@ add_action('init', function () {
         'public'              => true,
         'has_archive'         => true,
         'rewrite'             => ['slug' => 'animateurs'],
-        'supports'            => ['title', 'thumbnail'],
+        'supports'            => ['title'],
         'menu_icon'           => 'dashicons-admin-users',
         'show_in_rest'        => true,
         'show_in_graphql'     => true,
