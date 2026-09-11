@@ -64,6 +64,7 @@ export interface ActualiteDetail {
   category: string;
   image: { url: string; alt: string } | null;
   uri:      string;
+  lien?:    string | null;
 }
 
 export function transformActualiteDetail(data: GetActualiteBySlugData): ActualiteDetail | null {

@@ -1,6 +1,14 @@
 import Image from 'next/image';
-import { normalizeWpImageUrl } from '@/lib/wordpress';
+import Link  from 'next/link';
+import { normalizeWpImageUrl, isExternalUrl } from '@/lib/wordpress';
 import type { ActualiteDetail } from '@/app/data/actualites/transformer';
+
+const BUTTON_CN = 'font-button font-semibold inline-flex items-center justify-center self-start rounded-[30px] bg-secondary text-white text-sm h-[44px] px-6 whitespace-nowrap hover:bg-secondary/90 transition-colors no-underline';
+
+// N'autorise que les liens http(s), relatifs ou ancres — rejette javascript:, data:, vbscript:, etc.
+function isSafeHref(url: string): boolean {
+  return /^(https?:\/\/|\/|#)/i.test(url.trim());
+}
 
 interface Props {
   article: ActualiteDetail;
@@ -36,6 +44,22 @@ export default function ArticleDetail({ article }: Props) {
               className="article-content"
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
+            {article.lien && isSafeHref(article.lien) && (
+              isExternalUrl(article.lien) ? (
+                <a
+                  href={article.lien}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={BUTTON_CN}
+                >
+                  En savoir plus
+                </a>
+              ) : (
+                <Link href={article.lien} className={BUTTON_CN}>
+                  En savoir plus
+                </Link>
+              )
+            )}
           </div>
 
         </div>
