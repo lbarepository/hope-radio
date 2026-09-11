@@ -51,6 +51,7 @@ export default async function AgendaItemPage({ params }: Props) {
         category: item.category,
         image:    item.image,
         uri:      `/agenda/${slug}`,
+        lien:     item.lien,
       }}
     />
   );
