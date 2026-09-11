@@ -11,9 +11,9 @@ export { MOCK_SOCIAL_MENU } from './menus/mock-social-menu';
 export { MOCK_SITE_LOGO } from './layout/mock-site-logo';
 
 // Hero Slider
-export { MOCK_FEATURED_CONTENT }              from './hero/mock-featured-content';
-export { transformFeaturedContent }           from './hero/transformer';
-export type { FeaturedSlide, PostType }       from './hero/transformer';
+export { MOCK_SLIDES_HOME }                   from './hero/mock-slides-home';
+export { transformSlidesHome }                from './hero/transformer';
+export type { HeroSlide, HeroSlideLink }      from './hero/transformer';
 
 // Actualités
 export { MOCK_ACTUALITES }                    from './actualites/mock-actualites';
