@@ -34,7 +34,6 @@ export default function HeroSlider({ slides }: Props) {
       >
         {slides.map((slide) => {
           const link1 = isValidLink(slide.link1) ? slide.link1 : null;
-          const link2 = isValidLink(slide.link2) ? slide.link2 : null;
 
           return (
           <SwiperSlide key={slide.id}>
@@ -72,17 +71,11 @@ export default function HeroSlider({ slides }: Props) {
                     <SlideActionLink link={link1} defaultLabel="En savoir plus" className={BUTTON1_CN} />
                   )}
 
-                  {/* Bouton 2 — Message en direct */}
-                  {link2 ? (
-                    <SlideActionLink link={link2} defaultLabel="Message en direct" className={BUTTON2_CN}>
-                      <LiveIcon />
-                    </SlideActionLink>
-                  ) : (
-                    <button type="button" className={BUTTON2_CN}>
-                      Message en direct
-                      <LiveIcon />
-                    </button>
-                  )}
+                  {/* Bouton 2 — Message en direct (statique, en dur : ouvrira une popup d'envoi de message, à implémenter) */}
+                  <button type="button" className={BUTTON2_CN}>
+                    Message en direct
+                    <LiveIcon />
+                  </button>
                 </div>
               </div>
 

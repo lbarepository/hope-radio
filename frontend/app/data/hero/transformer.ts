@@ -19,7 +19,6 @@ export interface HeroSlide {
   description: string;
   imageUrl:    string | null;
   link1:       HeroSlideLink | null;
-  link2:       HeroSlideLink | null;
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -42,6 +41,5 @@ export function transformSlidesHome(data: GetSlidesHomeData): HeroSlide[] {
     description: item.description ?? '',
     imageUrl:    item.image?.sourceUrl ? normalizeWpImageUrl(item.image.sourceUrl) : null,
     link1:       transformLink(item.lien1),
-    link2:       transformLink(item.lien2),
   }));
 }
