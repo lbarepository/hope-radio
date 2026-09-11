@@ -21,7 +21,6 @@ export interface SlideHomeItemNode {
   description: string | null;
   image:       SlideHomeImageNode | null;
   lien1:       SlideHomeLinkNode | null;
-  lien2:       SlideHomeLinkNode | null;
 }
 
 export interface GetSlidesHomeData {
@@ -40,11 +39,6 @@ export const GET_SLIDES_HOME = /* GraphQL */ `
         altText
       }
       lien1 {
-        url
-        title
-        target
-      }
-      lien2 {
         url
         title
         target

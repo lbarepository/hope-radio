@@ -412,13 +412,6 @@ acf_add_local_field_group([
                     'type'          => 'link',
                     'return_format' => 'array',
                 ],
-                [
-                    'key'           => 'field_slide_home_lien_2',
-                    'label'         => 'Lien bouton 2 (Message en direct)',
-                    'name'          => 'lien_2',
-                    'type'          => 'link',
-                    'return_format' => 'array',
-                ],
             ],
         ],
         [
@@ -737,7 +730,6 @@ add_action('graphql_register_types', function () {
             'description' => ['type' => 'String'],
             'image'       => ['type' => 'SlideHomeImage'],
             'lien1'       => ['type' => 'SlideHomeLink'],
-            'lien2'       => ['type' => 'SlideHomeLink'],
         ],
     ]);
 
@@ -764,7 +756,6 @@ add_action('graphql_register_types', function () {
                     'description' => $row['description'] ?? null,
                     'image'       => $image ? ['sourceUrl' => $image['url'] ?? null, 'altText' => $image['alt'] ?? ''] : null,
                     'lien1'       => $mapLink($row['lien_1'] ?? null),
-                    'lien2'       => $mapLink($row['lien_2'] ?? null),
                 ];
             }, $rows);
         },
