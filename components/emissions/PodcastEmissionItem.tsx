@@ -62,7 +62,7 @@ export default function PodcastEmissionItem({ episode }: Props) {
             }`}
           >
             <span className="relative z-10">
-              {isThisPlaying ? `En écoute ${formatSeconds(remainingSeconds)}` : 'Écouter le podcast'}
+              {isThisPlaying ? `En écoute - ${formatSeconds(remainingSeconds)}` : 'Écouter le podcast'}
             </span>
           </button>
         </div>
