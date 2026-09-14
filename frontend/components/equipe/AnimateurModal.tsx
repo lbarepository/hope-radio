@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Image from 'next/image';
+import DOMPurify from 'isomorphic-dompurify';
 
 import { normalizeWpImageUrl } from '@/lib/wordpress';
 import type { AnimateurCard } from '@/app/data';
@@ -145,7 +146,9 @@ export default function AnimateurModal({ animateur, onClose }: AnimateurModalPro
           {animateur.bio && (
             <div
               className="font-heading text-gray-700 text-[15px] leading-[160%] [&_p]:m-0 [&_p+p]:mt-3"
-              dangerouslySetInnerHTML={{ __html: animateur.bio }}
+              // bio est du HTML riche saisi dans WP (WYSIWYG) : on le sanitise avant
+              // injection pour bloquer tout <script>/attribut on* malveillant (XSS).
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(animateur.bio) }}
             />
           )}
 
