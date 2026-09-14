@@ -97,7 +97,12 @@ export default function EmissionDetail({ emission, horaire, podcasts, equipe }: 
           </h3>
           <div className="grid grid-cols-1 gap-6">
             {podcasts.map((episode) => (
-              <PodcastEmissionItem key={episode.id} episode={episode} />
+              <PodcastEmissionItem
+                key={episode.id}
+                episode={episode}
+                animateurNoms={animateurNoms}
+                equipe={equipe}
+              />
             ))}
           </div>
         </div>
