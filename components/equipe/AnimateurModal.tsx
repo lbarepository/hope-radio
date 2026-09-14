@@ -145,7 +145,7 @@ export default function AnimateurModal({ animateur, onClose }: AnimateurModalPro
 
           {animateur.bio && (
             <div
-              className="font-heading normal-case text-gray-700 text-[15px] leading-[160%] [&_p]:m-0 [&_p+p]:mt-3"
+              className="font-body normal-case text-gray-700 text-[15px] leading-[160%] [&_p]:m-0 [&_p+p]:mt-3"
               // bio est du HTML riche saisi dans WP (WYSIWYG) : on le sanitise avant
               // injection pour bloquer tout <script>/attribut on* malveillant (XSS).
               dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(animateur.bio) }}
