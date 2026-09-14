@@ -15,7 +15,9 @@ export interface AnimateurReseauxSociauxNode {
   instagram: string | null;
   twitter:   string | null;
   youtube:   string | null;
-  tiktok:    string | null;
+  // Absent de la query tant que le champ ACF `tiktok` n'est pas déployé sur le
+  // serveur WordPress (voir plus bas) — optionnel pour ne pas casser le typage.
+  tiktok?:   string | null;
 }
 
 export interface AnimateurInfosNode {
@@ -61,7 +63,10 @@ export const GET_ANIMATEURS = /* GraphQL */ `
             instagram
             twitter
             youtube
-            tiktok
+            # tiktok retiré temporairement : le champ ACF correspondant n'est pas
+            # encore déployé sur le serveur WP, WPGraphQL rejette la query entière
+            # tant qu'il est demandé (voir wordpress/themes/hope-radio/inc/acf-fields.php).
+            # À réactiver une fois le thème WP redéployé.
           }
         }
       }
