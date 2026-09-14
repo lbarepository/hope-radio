@@ -3,12 +3,18 @@
 import { usePlayerStore } from '@/store/playerStore';
 import { formatSeconds, parseDurationToSeconds } from '@/lib/podcasts';
 import type { PodcastEpisode } from '@/lib/podcasts';
+import type { AnimateurCard } from '@/app/data';
+import AnimateurNamesInline from '@/components/animateurs/AnimateurNamesInline';
 
 interface Props {
   episode: PodcastEpisode;
+  // Un épisode appartient à une seule émission (filtré par `getEpisodesForEmission`) :
+  // ses animateurs sont donc ceux de l'émission parente, transmis par EmissionDetail.
+  animateurNoms?: { prenom: string | null; nom: string | null }[];
+  equipe?:        AnimateurCard[];
 }
 
-export default function PodcastEmissionItem({ episode }: Props) {
+export default function PodcastEmissionItem({ episode, animateurNoms, equipe }: Props) {
   const isPlaying   = usePlayerStore((s) => s.isPlaying);
   const streamUrl   = usePlayerStore((s) => s.streamUrl);
   const currentTime = usePlayerStore((s) => s.currentTime);
@@ -45,6 +51,23 @@ export default function PodcastEmissionItem({ episode }: Props) {
           >
             {episode.title}
           </h3>
+
+          {animateurNoms && animateurNoms.length > 0 && (
+            <p
+              className="font-heading font-[700] uppercase m-0"
+              style={{ color: '#31251A', fontSize: '14px', lineHeight: '124%' }}
+            >
+              Avec{' '}
+              {equipe && equipe.length > 0 ? (
+                <AnimateurNamesInline noms={animateurNoms} equipe={equipe} />
+              ) : (
+                animateurNoms
+                  .map((a) => `${a.prenom ?? ''} ${a.nom ?? ''}`.trim())
+                  .filter(Boolean)
+                  .join(', ')
+              )}
+            </p>
+          )}
 
           {episode.description && (
             <p
