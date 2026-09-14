@@ -18,6 +18,10 @@ de la section (`titre`, défaut : « L'équipe »).
   lister tous les animateurs publiés (requête `animateurs`, pas de lien avec
   le bloc lui-même) et affiche le slider (Swiper) avec, par slide :
   photo dans une bulle ronde, `PRÉNOM NOM`, fonction.
+- **Popup animateur** : cliquer sur une slide ouvre une modale
+  (`AnimateurModal`) avec la photo, le nom, la fonction, la biographie
+  (`bio`, wysiwyg) et les liens réseaux sociaux renseignés (Facebook,
+  Instagram, X, YouTube, TikTok — seuls ceux non vides sont affichés).
 
 ## Attributs (`block.json`)
 
@@ -39,6 +43,7 @@ query GetAnimateurs {
         prenom
         nom
         fonction
+        bio
         photo {
           node {
             sourceUrl
@@ -46,6 +51,13 @@ query GetAnimateurs {
           }
         }
         # note : photo est une AcfMediaItemConnectionEdge, comme featuredImage
+        reseauxSociaux {
+          facebook
+          instagram
+          twitter
+          youtube
+          tiktok
+        }
       }
     }
   }

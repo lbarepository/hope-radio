@@ -45,4 +45,4 @@ export type { RadioCard }  from './radios/transformer';
 
 // Équipe
 export { transformAnimateurs } from './animateurs/transformer';
-export type { AnimateurCard }  from './animateurs/transformer';
+export type { AnimateurCard, AnimateurReseaux } from './animateurs/transformer';
