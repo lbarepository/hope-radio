@@ -1,6 +1,9 @@
 import Image from 'next/image';
 import Link  from 'next/link';
 
+import type { AnimateurCard } from '@/app/data';
+import AnimateurNamesInline   from '@/components/animateurs/AnimateurNamesInline';
+
 export interface CardData {
   id:         string;
   title:      string;
@@ -9,8 +12,18 @@ export interface CardData {
   uri:        string;
   excerpt:    string | null;
   animateur:  string | null;
+  // Noms bruts (prénom/nom) tels que saisis sur l'émission ; permet de les lier
+  // à la fiche animateur (`equipe`, ci-dessous) pour ouvrir sa popup au clic.
+  animateurNoms?: { prenom: string | null; nom: string | null }[];
   heureDebut?: string;
   heureFin?:   string;
+}
+
+interface GrilleCardProps {
+  slot:   CardData;
+  // Liste complète de l'équipe, utilisée pour retrouver la fiche d'un animateur
+  // par son nom. Absente = pas de matching possible, on retombe sur du texte simple.
+  equipe?: AnimateurCard[];
 }
 
 function formatTime(time: string): string {
@@ -19,7 +32,7 @@ function formatTime(time: string): string {
   return m === '00' ? `${hour}h` : `${hour}h${m}`;
 }
 
-export default function GrilleCard({ slot }: { slot: CardData }) {
+export default function GrilleCard({ slot, equipe }: GrilleCardProps) {
   const horaire = slot.heureDebut && slot.heureFin
     ? `${formatTime(slot.heureDebut)} > ${formatTime(slot.heureFin)}`
     : null;
@@ -61,7 +74,12 @@ export default function GrilleCard({ slot }: { slot: CardData }) {
             {/* Animateur */}
             {slot.animateur && (
                 <p className="font-heading text-[14px] font-bold leading-[124%] text-[#31251A] uppercase m-0">
-                    Avec {slot.animateur}
+                    Avec{' '}
+                    {slot.animateurNoms && equipe && equipe.length > 0 ? (
+                      <AnimateurNamesInline noms={slot.animateurNoms} equipe={equipe} />
+                    ) : (
+                      slot.animateur
+                    )}
                 </p>
             )}
 
