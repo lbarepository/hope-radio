@@ -1,13 +1,14 @@
 import type { GetEmissionsData, GetEmissionBySlugData } from '@/graphql/emissions';
 
 export interface EmissionCard {
-  id:        string;
-  title:     string;
-  category:  string | null;
-  image:     { url: string; alt: string };
-  uri:       string;
-  excerpt:   string | null;
-  animateur: string | null;
+  id:            string;
+  title:         string;
+  category:      string | null;
+  image:         { url: string; alt: string };
+  uri:           string;
+  excerpt:       string | null;
+  animateur:     string | null;
+  animateurNoms: { prenom: string | null; nom: string | null }[];
 }
 
 export interface EmissionPageInfo {
@@ -35,6 +36,7 @@ export function transformEmissions(data: GetEmissionsData): {
       uri:       node.uri,
       excerpt:   node.excerpt ?? null,
       animateur,
+      animateurNoms: node.animateurs ?? [],
     };
   });
   return {
@@ -49,14 +51,15 @@ export function transformEmissions(data: GetEmissionsData): {
 // ─── Single emission ──────────────────────────────────────────────────────────
 
 export interface EmissionDetail {
-  title:      string;
-  slug:       string;
-  uri:        string;
-  content:    string;
-  excerpt:    string;
-  animateurs: string;
-  category:   string | null;
-  image:      { url: string; alt: string } | null;
+  title:         string;
+  slug:          string;
+  uri:           string;
+  content:       string;
+  excerpt:       string;
+  animateurs:    string;
+  animateurNoms: { prenom: string | null; nom: string | null }[];
+  category:      string | null;
+  image:         { url: string; alt: string } | null;
 }
 
 export function transformEmissionDetail(data: GetEmissionBySlugData): EmissionDetail | null {
@@ -75,6 +78,7 @@ export function transformEmissionDetail(data: GetEmissionBySlugData): EmissionDe
     content:    node.content  ?? '',
     excerpt:    node.excerpt ? node.excerpt.replace(/<[^>]*>/g, '').trim() : '',
     animateurs,
+    animateurNoms: node.animateurs ?? [],
     category:   node.emissionCategories.nodes[0]?.name ?? null,
     image:      node.featuredImage
       ? { url: node.featuredImage.node.sourceUrl, alt: node.featuredImage.node.altText || node.title }

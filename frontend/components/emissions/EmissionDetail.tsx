@@ -4,15 +4,18 @@ import ShareButton               from './ShareButton';
 import PodcastEmissionItem       from './PodcastEmissionItem';
 import type { EmissionDetail }   from '@/app/data/emissions/transformer';
 import type { PodcastEpisode }   from '@/lib/podcasts';
+import type { AnimateurCard }    from '@/app/data';
+import AnimateurNamesInline      from '@/components/animateurs/AnimateurNamesInline';
 
 interface Props {
   emission: EmissionDetail;
   horaire:  string | null;
   podcasts: PodcastEpisode[];
+  equipe:   AnimateurCard[];
 }
 
-export default function EmissionDetail({ emission, horaire, podcasts }: Props) {
-  const { title, animateurs, content, image } = emission;
+export default function EmissionDetail({ emission, horaire, podcasts, equipe }: Props) {
+  const { title, animateurs, animateurNoms, content, image } = emission;
 
   return (
     <>
@@ -60,7 +63,12 @@ export default function EmissionDetail({ emission, horaire, podcasts }: Props) {
               className="font-heading font-[700] uppercase"
               style={{ color: '#31251A', fontSize: '14px', lineHeight: '124%' }}
             >
-              Avec {animateurs}
+              Avec{' '}
+              {equipe.length > 0 ? (
+                <AnimateurNamesInline noms={animateurNoms} equipe={equipe} />
+              ) : (
+                animateurs
+              )}
             </p>
           )}
 
