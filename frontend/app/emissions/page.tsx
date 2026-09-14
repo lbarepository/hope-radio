@@ -1,13 +1,16 @@
 import { fetchGraphQL }                                           from '@/lib/wordpress';
 import { GET_EMISSION_CATEGORIES, GET_EMISSIONS_ALL }             from '@/graphql/emissions';
 import type { GetEmissionCategoriesData, GetEmissionsData }       from '@/graphql/emissions';
-import { transformEmissions }                                     from '@/app/data/emissions/transformer';
+import { GET_ANIMATEURS }                                         from '@/graphql/animateurs';
+import type { GetAnimateursData }                                 from '@/graphql/animateurs';
+import { transformEmissions, transformAnimateurs }                from '@/app/data';
+import type { AnimateurCard }                                     from '@/app/data';
 import { loadMoreEmissions }                                      from './actions';
 import EmissionsClient                                            from '@/components/emissions/EmissionsClient';
 import { wpTags }                                                 from '@/lib/revalidateTags';
 
 export default async function EmissionsPage() {
-  const [categoriesResult, emissionsResult] = await Promise.allSettled([
+  const [categoriesResult, emissionsResult, animateursResult] = await Promise.allSettled([
     fetchGraphQL<GetEmissionCategoriesData>(
       GET_EMISSION_CATEGORIES,
       {},
@@ -17,6 +20,11 @@ export default async function EmissionsPage() {
       GET_EMISSIONS_ALL,
       { first: 4, after: null },
       { next: { revalidate: 60, tags: [wpTags.emissions] } },
+    ),
+    fetchGraphQL<GetAnimateursData>(
+      GET_ANIMATEURS,
+      { first: 50 },
+      { next: { revalidate: 60, tags: [wpTags.animateurs] } },
     ),
   ]);
 
@@ -30,6 +38,9 @@ export default async function EmissionsPage() {
       ? transformEmissions(emissionsResult.value)
       : { cards: [], pageInfo: { hasNextPage: false, endCursor: null } };
 
+  const equipe: AnimateurCard[] =
+    animateursResult.status === 'fulfilled' ? transformAnimateurs(animateursResult.value) : [];
+
   return (
     <main className="bg-secondary min-h-screen py-16">
       <div className="container mx-auto px-6 lg:px-0">
@@ -42,6 +53,7 @@ export default async function EmissionsPage() {
           initialPageInfo={initialPageInfo}
           categories={categories}
           loadMore={loadMoreEmissions}
+          equipe={equipe}
         />
       </div>
     </main>

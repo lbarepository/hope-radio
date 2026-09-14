@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useTransition } from 'react';
 import type { EmissionCard, EmissionPageInfo }         from '@/app/data/emissions/transformer';
 import type { EmissionCategoryNode }                   from '@/graphql/emissions';
 import type { loadMoreEmissions }                      from '@/app/emissions/actions';
+import type { AnimateurCard }                          from '@/app/data';
 import GrilleCard                                      from '@/components/grille/GrilleCard';
 
 interface EmissionsClientProps {
@@ -11,6 +12,7 @@ interface EmissionsClientProps {
   initialPageInfo: EmissionPageInfo;
   categories:      EmissionCategoryNode[];
   loadMore:        typeof loadMoreEmissions;
+  equipe:          AnimateurCard[];
 }
 
 export default function EmissionsClient({
@@ -18,6 +20,7 @@ export default function EmissionsClient({
   initialPageInfo,
   categories,
   loadMore,
+  equipe,
 }: EmissionsClientProps) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [cards, setCards]                   = useState<EmissionCard[]>(initialCards);
@@ -103,7 +106,7 @@ export default function EmissionsClient({
       {/* Liste des cards */}
       <div className="flex flex-col gap-6">
         {cards.map((card) => (
-          <GrilleCard key={card.id} slot={card} />
+          <GrilleCard key={card.id} slot={card} equipe={equipe} />
         ))}
       </div>
 

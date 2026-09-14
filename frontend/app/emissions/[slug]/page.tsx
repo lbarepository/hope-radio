@@ -6,7 +6,11 @@ import { GET_EMISSION_BY_SLUG }                               from '@/graphql/em
 import type { GetEmissionBySlugData }                         from '@/graphql/emissions';
 import { GET_GRILLE_SLOTS }                                   from '@/graphql/grille';
 import type { GetGrilleSlotsData }                            from '@/graphql/grille';
+import { GET_ANIMATEURS }                                     from '@/graphql/animateurs';
+import type { GetAnimateursData }                             from '@/graphql/animateurs';
 import { transformEmissionDetail }                            from '@/app/data/emissions/transformer';
+import { transformAnimateurs }                                from '@/app/data';
+import type { AnimateurCard }                                 from '@/app/data';
 import EmissionDetail                                         from '@/components/emissions/EmissionDetail';
 import { wpTags }                                             from '@/lib/revalidateTags';
 import { fetchPodcastChannel, getEpisodesForEmission }         from '@/lib/podcasts';
@@ -60,7 +64,7 @@ export default async function EmissionPage({ params }: Props) {
   const { slug } = await params;
   const { dateDebut, dateFin } = getTwoWeekRange();
 
-  const [emissionResult, grilleResult, podcastChannel] = await Promise.allSettled([
+  const [emissionResult, grilleResult, podcastChannel, animateursResult] = await Promise.allSettled([
     fetchGraphQL<GetEmissionBySlugData>(
       GET_EMISSION_BY_SLUG,
       { slug },
@@ -72,6 +76,11 @@ export default async function EmissionPage({ params }: Props) {
       { next: { revalidate: 60, tags: [wpTags.grille] } },
     ),
     fetchPodcastChannel(),
+    fetchGraphQL<GetAnimateursData>(
+      GET_ANIMATEURS,
+      { first: 50 },
+      { next: { revalidate: 60, tags: [wpTags.animateurs] } },
+    ),
   ]);
 
   if (emissionResult.status === 'rejected') notFound();
@@ -85,5 +94,8 @@ export default async function EmissionPage({ params }: Props) {
   const channel  = podcastChannel.status === 'fulfilled' ? podcastChannel.value : null;
   const podcasts = getEpisodesForEmission(channel?.episodes ?? [], slug);
 
-  return <EmissionDetail emission={emission} horaire={horaire} podcasts={podcasts} />;
+  const equipe: AnimateurCard[] =
+    animateursResult.status === 'fulfilled' ? transformAnimateurs(animateursResult.value) : [];
+
+  return <EmissionDetail emission={emission} horaire={horaire} podcasts={podcasts} equipe={equipe} />;
 }
