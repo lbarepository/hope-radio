@@ -136,7 +136,7 @@ export default function AnimateurModal({ animateur, onClose }: AnimateurModalPro
               {animateur.nom}
             </h3>
             {animateur.fonction && (
-              <p className="font-heading font-[700] text-gray-900 text-[16px] leading-[130%] m-0 mt-1">
+              <p className="font-nav font-[900] text-gray-900 text-[20px] md:text-[24px] leading-[110%] m-0 mt-1">
                 {animateur.fonction}
               </p>
             )}
