@@ -10,11 +10,21 @@ export interface AnimateurImageNode {
   altText:   string;
 }
 
+export interface AnimateurReseauxSociauxNode {
+  facebook:  string | null;
+  instagram: string | null;
+  twitter:   string | null;
+  youtube:   string | null;
+  tiktok:    string | null;
+}
+
 export interface AnimateurInfosNode {
-  prenom:   string | null;
-  nom:      string | null;
-  fonction: string | null;
-  photo:    { node: AnimateurImageNode } | null;
+  prenom:         string | null;
+  nom:            string | null;
+  fonction:       string | null;
+  bio:            string | null;
+  photo:          { node: AnimateurImageNode } | null;
+  reseauxSociaux: AnimateurReseauxSociauxNode | null;
 }
 
 export interface AnimateurNode {
@@ -39,11 +49,19 @@ export const GET_ANIMATEURS = /* GraphQL */ `
           prenom
           nom
           fonction
+          bio
           photo {
             node {
               sourceUrl
               altText
             }
+          }
+          reseauxSociaux {
+            facebook
+            instagram
+            twitter
+            youtube
+            tiktok
           }
         }
       }
