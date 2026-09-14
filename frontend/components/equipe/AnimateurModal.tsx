@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import DOMPurify from 'isomorphic-dompurify';
 
@@ -90,7 +91,11 @@ export default function AnimateurModal({ animateur, onClose }: AnimateurModalPro
     .map((r) => ({ ...r, href: safeHttpUrl(animateur.reseaux[r.id as keyof typeof animateur.reseaux]) }))
     .filter((r) => !!r.href);
 
-  return (
+  // Portail vers <body> : la modale (position fixed) peut être montée depuis
+  // n'importe où (ex. un nom d'animateur cliquable à l'intérieur d'un <p>) ;
+  // sans ça son <div> se retrouverait imbriqué dans un élément inline invalide
+  // en HTML (ex. <div> dans <p>), ce que React signale comme risque d'hydratation.
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       onClick={onClose}
@@ -171,6 +176,7 @@ export default function AnimateurModal({ animateur, onClose }: AnimateurModalPro
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
