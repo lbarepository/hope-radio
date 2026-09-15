@@ -23,7 +23,7 @@ export default async function SonPage() {
           C&apos;était quoi ce son&nbsp;?
         </h1>
         <p className="font-heading font-bold text-white/90 uppercase tracking-wide text-xs md:text-sm mb-10 max-w-2xl">
-          Vous avez raté un titre, pas de panique, voici les 20 derniers morceaux diffusés
+          Vous avez raté un titre, pas de panique, voici derniers morceaux diffusés
         </p>
 
         <SonList tracks={tracks} />
